@@ -209,13 +209,13 @@ export default function LandingPage() {
         background: "var(--color-nav-bg)",
         backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
       }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.5rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.25rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Logo size={44} spin={false} />
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", fontWeight: 500, color: "var(--color-ink)", letterSpacing: "-0.01em" }}>csreq</span>
+            <Logo size={36} spin={false} />
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", fontWeight: 500, color: "var(--color-ink)", letterSpacing: "-0.01em" }}>csreq</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "8px", padding: "2px", gap: "2px" }}>
+            <div className="hide-sm" style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "8px", padding: "2px", gap: "2px" }}>
               {(["dark", "light"] as const).map(m => (
                 <button key={m} onClick={() => toggleTheme(m)} style={{
                   padding: "4px 10px", fontSize: "0.72rem", fontWeight: 600,
@@ -231,10 +231,11 @@ export default function LandingPage() {
             <Link
               href="/app"
               style={{
-                padding: "7px 18px", fontSize: "0.82rem", fontWeight: 600,
+                padding: "7px 16px", fontSize: "0.82rem", fontWeight: 600,
                 background: "linear-gradient(135deg, var(--color-amber) 0%, var(--color-amber-hi) 100%)",
                 color: "#fff", borderRadius: "100px", textDecoration: "none",
                 boxShadow: "0 2px 10px rgba(224,120,48,0.3)", transition: "all 0.2s",
+                whiteSpace: "nowrap",
               }}
             >
               Try free →
@@ -244,7 +245,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "6rem 1.5rem 5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem, 8vw, 6rem) 1.25rem clamp(2.5rem, 6vw, 5rem)" }}>
         <div className="animate-fade-up">
           <p style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "1rem", fontWeight: 500 }}>
             Couch Request
@@ -280,10 +281,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.5rem" }} />
+      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.25rem" }} />
 
       {/* Example letters */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem,6vw,5rem) 1.25rem" }}>
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
             See it in action
@@ -296,7 +297,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        <div className="r-grid-3">
           {EXAMPLE_LETTERS.map((ex, i) => (
             <button
               key={i}
@@ -337,10 +338,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.5rem" }} />
+      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.25rem" }} />
 
       {/* How it works */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem,6vw,5rem) 1.25rem" }}>
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
             How it works
@@ -350,7 +351,7 @@ export default function LandingPage() {
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+        <div className="r-grid-steps">
           {[
             { n: "01", title: "Paste the host's profile", body: "Copy the text from their CouchSurfing page — or just paste the URL. Works with the profile, home section, and references." },
             { n: "02", title: "Pick your dates", body: "Set your arrival and departure. The letter automatically mentions how long you're staying." },
@@ -374,10 +375,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.5rem" }} />
+      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.25rem" }} />
 
       {/* Why not ChatGPT */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem,6vw,5rem) 1.25rem" }}>
         <div style={{ marginBottom: "3.5rem" }}>
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
             vs. asking an llm directly
@@ -391,7 +392,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className="r-grid-2">
 
           {/* Card 1: AI patterns */}
           <div style={{ border: "1px solid var(--color-edge)", borderRadius: "20px", padding: "1.75rem", background: "rgba(255,255,255,0.015)" }}>
@@ -496,10 +497,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.5rem" }} />
+      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.25rem" }} />
 
       {/* Features */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem,6vw,5rem) 1.25rem" }}>
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
             Why different
@@ -510,7 +511,7 @@ export default function LandingPage() {
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.25rem" }}>
+        <div className="r-grid-2">
           {FEATURES.map(f => (
             <div key={f.title} style={{
               border: "1px solid var(--color-edge)", borderRadius: "16px",
@@ -528,10 +529,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.5rem" }} />
+      <div style={{ height: "1px", background: "var(--color-edge)", margin: "0 1.25rem" }} />
 
       {/* Pricing */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "5rem 1.5rem" }}>
+      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "clamp(3rem,6vw,5rem) 1.25rem" }}>
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
             Pricing
@@ -541,7 +542,7 @@ export default function LandingPage() {
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem", alignItems: "start" }}>
+        <div className="r-grid-pricing">
           {/* Free */}
           <div style={{ border: "1px solid var(--color-edge)", borderRadius: "20px", padding: "1.75rem" }}>
             <p style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Free</p>
