@@ -297,7 +297,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="r-grid-3">
+        <div className="r-grid-3 swipe-cards">
           {EXAMPLE_LETTERS.map((ex, i) => (
             <button
               key={i}
@@ -392,7 +392,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="r-grid-2">
+        <div className="r-grid-2 swipe-cards">
 
           {/* Card 1: AI patterns */}
           <div style={{ border: "1px solid var(--color-edge)", borderRadius: "20px", padding: "1.75rem", background: "rgba(255,255,255,0.015)" }}>
@@ -542,7 +542,7 @@ export default function LandingPage() {
           </h2>
         </div>
 
-        <div className="r-grid-pricing">
+        <div className="r-grid-pricing swipe-cards">
           {/* Free */}
           <div style={{ border: "1px solid var(--color-edge)", borderRadius: "20px", padding: "1.75rem" }}>
             <p style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Free</p>

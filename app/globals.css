@@ -274,12 +274,30 @@ html[data-theme="light"] .spotlight-card::before {
 }
 
 @media (max-width: 640px) {
-  .r-grid-3,
-  .r-grid-2,
   .r-grid-steps,
-  .r-grid-pricing {
+  .r-grid-2 {
     grid-template-columns: 1fr;
   }
+
+  /* Carousel sections become horizontal swipe */
+  .swipe-cards {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.85rem;
+    /* bleed to page edge so first card aligns with content */
+    margin: 0 -1.25rem;
+    padding: 0 1.25rem 1.5rem;
+  }
+  .swipe-cards::-webkit-scrollbar { display: none; }
+  .swipe-cards > * {
+    flex: 0 0 min(82vw, 320px);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
   .hide-sm { display: none !important; }
 }
 
