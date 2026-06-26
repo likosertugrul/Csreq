@@ -292,26 +292,26 @@ function PageInner() {
         backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
         transition: "background 0.3s",
       }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.5rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
-          <a href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-            <Logo size={44} spin={false} />
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", fontWeight: 500, color: "var(--color-ink)", letterSpacing: "-0.01em" }}>csreq</span>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.25rem", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
+          <a href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", flexShrink: 0 }}>
+            <Logo size={36} spin={false} />
+            <span className="hide-sm" style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", fontWeight: 500, color: "var(--color-ink)", letterSpacing: "-0.01em" }}>csreq</span>
           </a>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", minWidth: 0 }}>
             {/* Free letter counter for guests */}
             {isGuest && !isPro && remainingFree !== null && remainingFree <= 2 && (
-              <div style={{
-                padding: "4px 10px", fontSize: "0.7rem",
+              <div className="hide-sm" style={{
+                padding: "4px 10px", fontSize: "0.7rem", flexShrink: 0,
                 border: "1px solid var(--color-edge)", borderRadius: "100px",
                 color: remainingFree === 0 ? "#e07070" : "var(--color-ink-muted)",
                 background: remainingFree === 0 ? "rgba(220,60,60,0.06)" : "transparent",
               }}>
-                {remainingFree === 0 ? "No free letters left" : `${remainingFree} free ${remainingFree === 1 ? "letter" : "letters"} left`}
+                {remainingFree === 0 ? "No free letters left" : `${remainingFree} left`}
               </div>
             )}
 
-            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "8px", padding: "2px", gap: "2px" }}>
+            <div className="hide-sm" style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "8px", padding: "2px", gap: "2px", flexShrink: 0 }}>
               {(["dark", "light"] as const).map(m => (
                 <button
                   key={m}
@@ -333,9 +333,9 @@ function PageInner() {
               value={appLang}
               onChange={e => { setAppLang(e.target.value as Lang); localStorage.setItem("csreq_app_lang", e.target.value); }}
               style={{
-                padding: "4px 10px", fontSize: "0.72rem", fontWeight: 600,
+                padding: "4px 8px", fontSize: "0.72rem", fontWeight: 600,
                 background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)",
-                borderRadius: "8px", color: "var(--color-ink-muted)", cursor: "pointer", outline: "none",
+                borderRadius: "8px", color: "var(--color-ink-muted)", cursor: "pointer", outline: "none", flexShrink: 0,
               }}
             >
               {LANGS.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}
@@ -453,8 +453,8 @@ function PageInner() {
         </div>
       </nav>
 
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.5rem" }}>
-        <div className="animate-fade-up" style={{ padding: "4rem 0 3rem" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 1.25rem" }}>
+        <div className="animate-fade-up" style={{ padding: "clamp(2rem,5vw,4rem) 0 clamp(1.5rem,4vw,3rem)" }}>
           <p style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.75rem", fontWeight: 500 }}>
             {t.couchRequest}
           </p>
@@ -471,7 +471,7 @@ function PageInner() {
 
         <div className="animate-fade-up delay-1" style={{ height: "1px", background: "var(--color-edge)", marginBottom: "2.5rem" }} />
 
-        <div className="animate-fade-up delay-2" style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "2rem", alignItems: "start" }}>
+        <div className="animate-fade-up delay-2 app-layout">
           <SpotlightCard className="card card-lift" style={{ padding: "1.75rem" }}>
             <HostProfileInput
               t={t} value={hostText} onChange={setHostText}

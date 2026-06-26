@@ -273,6 +273,20 @@ html[data-theme="light"] .spotlight-card::before {
   align-items: start;
 }
 
+/* App tool 2-col layout */
+.app-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 640px) {
   .r-grid-steps,
   .r-grid-2 {
