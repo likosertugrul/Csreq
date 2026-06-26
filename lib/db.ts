@@ -1,25 +1,26 @@
-import Database from "better-sqlite3";
-import path from "path";
+import { createClient, type Client } from "@libsql/client/web";
 
-const DB_PATH = path.join(process.cwd(), "csreq.db");
+let _db: Client | null = null;
 
-let _db: Database.Database | null = null;
-
-export function getDb(): Database.Database {
+export async function getDb(): Promise<Client> {
   if (_db) return _db;
-  _db = new Database(DB_PATH);
-  _db.pragma("journal_mode = WAL");
 
-  _db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
+  _db = createClient({
+    url: process.env.TURSO_DATABASE_URL ?? "file:./csreq.db",
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  });
+
+  // Base schema
+  for (const sql of [
+    `CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
       password_hash TEXT,
-      google_id TEXT UNIQUE,
+      google_id TEXT,
       email_verified INTEGER NOT NULL DEFAULT 0,
       created_at INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS user_profiles (
+    )`,
+    `CREATE TABLE IF NOT EXISTS user_profiles (
       user_id TEXT PRIMARY KEY REFERENCES users(id),
       name TEXT NOT NULL DEFAULT '',
       hometown TEXT NOT NULL DEFAULT '',
@@ -29,44 +30,55 @@ export function getDb(): Database.Database {
       home_text TEXT NOT NULL DEFAULT '',
       refs_text TEXT NOT NULL DEFAULT '',
       updated_at INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS verification_tokens (
+    )`,
+    `CREATE TABLE IF NOT EXISTS verification_tokens (
       token TEXT PRIMARY KEY,
       user_id TEXT NOT NULL REFERENCES users(id),
       expires_at INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS oauth_states (
+    )`,
+    `CREATE TABLE IF NOT EXISTS oauth_states (
       state TEXT PRIMARY KEY,
       expires_at INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS pending_sessions (
+    )`,
+    `CREATE TABLE IF NOT EXISTS pending_sessions (
       token TEXT PRIMARY KEY,
       user_id TEXT NOT NULL REFERENCES users(id),
       expires_at INTEGER NOT NULL
-    );
-  `);
+    )`,
+    `CREATE TABLE IF NOT EXISTS payments (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      lemon_order_id TEXT UNIQUE,
+      plan_type TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
+  ]) {
+    try { await _db.execute(sql); } catch {}
+  }
 
-  // Migrate existing users table if it lacks new columns
-  try { _db.exec(`ALTER TABLE users ADD COLUMN google_id TEXT`); } catch {}
-  try { _db.exec(`ALTER TABLE users ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 0`); } catch {}
-  try { _db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS users_google_id ON users(google_id) WHERE google_id IS NOT NULL`); } catch {}
-  try { _db.exec(`ALTER TABLE user_profiles ADD COLUMN refs_text TEXT NOT NULL DEFAULT ''`); } catch {}
-  try { _db.exec(`ALTER TABLE verification_tokens ADD COLUMN code TEXT NOT NULL DEFAULT ''`); } catch {}
-  try { _db.exec(`ALTER TABLE users ADD COLUMN letters_used INTEGER NOT NULL DEFAULT 0`); } catch {}
-  try { _db.exec(`ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'free'`); } catch {}
-  try { _db.exec(`ALTER TABLE users ADD COLUMN plan_expires_at INTEGER`); } catch {}
-  try { _db.exec(`CREATE TABLE IF NOT EXISTS payments (
-    id TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    lemon_order_id TEXT UNIQUE,
-    plan_type TEXT NOT NULL,
-    amount INTEGER NOT NULL,
-    created_at INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-  )`); } catch {}
+  // Migrations
+  for (const sql of [
+    `ALTER TABLE users ADD COLUMN google_id TEXT`,
+    `ALTER TABLE users ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 0`,
+    `CREATE UNIQUE INDEX IF NOT EXISTS users_google_id ON users(google_id) WHERE google_id IS NOT NULL`,
+    `ALTER TABLE user_profiles ADD COLUMN refs_text TEXT NOT NULL DEFAULT ''`,
+    `ALTER TABLE verification_tokens ADD COLUMN code TEXT NOT NULL DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN letters_used INTEGER NOT NULL DEFAULT 0`,
+    `ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'free'`,
+    `ALTER TABLE users ADD COLUMN plan_expires_at INTEGER`,
+  ]) {
+    try { await _db.execute(sql); } catch {}
+  }
 
-  // Admin accounts always get pro access
-  try { _db.prepare("UPDATE users SET plan = 'pro', plan_expires_at = NULL, email_verified = 1 WHERE email = 'likosertugrul128@gmail.com'").run(); } catch {}
+  // Admin always pro
+  try {
+    await _db.execute({
+      sql: "UPDATE users SET plan = 'pro', plan_expires_at = NULL, email_verified = 1 WHERE email = ?",
+      args: ["likosertugrul128@gmail.com"],
+    });
+  } catch {}
 
   return _db;
 }
