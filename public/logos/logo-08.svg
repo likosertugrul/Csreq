@@ -1,0 +1,13 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning dashed ring (counter-clockwise) -->
+  <g>
+    <circle cx="40" cy="40" r="35" stroke="#e07830" stroke-width="1.5" stroke-dasharray="7 5" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="rotate" from="360 40 40" to="0 40 40" dur="7s" repeatCount="indefinite"/>
+  </g>
+  <!-- House roof -->
+  <path d="M17 42 L40 20 L63 42" stroke="#e07830" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- House walls -->
+  <rect x="24" y="42" width="32" height="22" stroke="#e07830" stroke-width="1.5"/>
+  <!-- Door (arched) -->
+  <path d="M35 64 L35 53 Q35 48 40 48 Q45 48 45 53 L45 64" stroke="#e07830" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

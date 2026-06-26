@@ -1,0 +1,13 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Faint orbit guide ring -->
+  <circle cx="40" cy="40" r="35" stroke="#e07830" stroke-width="0.5" opacity="0.12"/>
+  <!-- Orbiting amber dot -->
+  <g>
+    <circle cx="40" cy="5" r="4" fill="#e07830"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="3s" repeatCount="indefinite"/>
+  </g>
+  <!-- Envelope body -->
+  <rect x="14" y="27" width="52" height="34" rx="3" stroke="#e07830" stroke-width="1.5"/>
+  <!-- Envelope fold V -->
+  <polyline points="14,27 40,48 66,27" fill="none" stroke="#e07830" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

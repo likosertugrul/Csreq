@@ -1,0 +1,12 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Center anchor dot (static) -->
+  <circle cx="40" cy="40" r="5" fill="#e07830"/>
+  <circle cx="40" cy="40" r="10" stroke="#e07830" stroke-width="0.75" opacity="0.25"/>
+  <!-- Spinning circular arrow: 270° arc from top (40,8) to left (8,40) -->
+  <g>
+    <path d="M40 8 A32 32 0 1 1 8 40" stroke="#e07830" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <!-- Arrowhead at end (8,40) pointing downward (clockwise direction at left) -->
+    <path d="M3 34.5 L8 40 L13 34.5" stroke="#e07830" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="2s" repeatCount="indefinite"/>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning partial arc (1/4 gap at bottom-right) -->
+  <g>
+    <path d="M40 5 A35 35 0 1 0 74.7 51.5" stroke="#e07830" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="4s" repeatCount="indefinite"/>
+  </g>
+  <!-- Left circle (host) -->
+  <circle cx="30" cy="40" r="16" stroke="#e07830" stroke-width="1.5" fill="none"/>
+  <!-- Right circle (guest) -->
+  <circle cx="50" cy="40" r="16" stroke="#e07830" stroke-width="1.5" fill="none"/>
+  <!-- Overlap region highlight -->
+  <path d="M40 25.1 A16 16 0 0 1 40 54.9 A16 16 0 0 0 40 25.1 Z" fill="#e07830" fill-opacity="0.15"/>
+  <!-- Center dot at intersection midpoint -->
+  <circle cx="40" cy="40" r="3" fill="#e07830"/>
+</svg>

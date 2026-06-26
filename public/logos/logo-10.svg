@@ -1,0 +1,11 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning outer ring with two gaps (loading track style) -->
+  <g>
+    <circle cx="40" cy="40" r="36" stroke="#e07830" stroke-width="2" stroke-dasharray="48 26" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="3.5s" repeatCount="indefinite"/>
+  </g>
+  <!-- Inner thin static ring -->
+  <circle cx="40" cy="40" r="27" stroke="#e07830" stroke-width="0.5" opacity="0.2"/>
+  <!-- "c" letterform — large, bold, open arc -->
+  <path d="M52 27 A17 17 0 1 0 52 53" stroke="#e07830" stroke-width="3" stroke-linecap="round" fill="none"/>
+</svg>

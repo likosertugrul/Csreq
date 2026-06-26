@@ -1,0 +1,19 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning 3/4 arc -->
+  <g>
+    <path d="M40 5 A35 35 0 1 1 5 40" stroke="#e07830" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="4s" repeatCount="indefinite"/>
+  </g>
+  <!-- Couch backrest -->
+  <rect x="18" y="27" width="44" height="12" rx="4" stroke="#e07830" stroke-width="2.5"/>
+  <!-- Couch seat -->
+  <rect x="22" y="39" width="36" height="12" rx="2" stroke="#e07830" stroke-width="2.5"/>
+  <!-- Letter lines inside seat -->
+  <line x1="27" y1="42.5" x2="53" y2="42.5" stroke="#e07830" stroke-width="2" stroke-linecap="round"/>
+  <line x1="27" y1="46"   x2="53" y2="46"   stroke="#e07830" stroke-width="2" stroke-linecap="round"/>
+  <line x1="27" y1="49.5" x2="43" y2="49.5" stroke="#e07830" stroke-width="2" stroke-linecap="round"/>
+  <!-- Left arm -->
+  <rect x="12" y="32" width="10" height="19" rx="4" stroke="#e07830" stroke-width="2.5"/>
+  <!-- Right arm -->
+  <rect x="58" y="32" width="10" height="19" rx="4" stroke="#e07830" stroke-width="2.5"/>
+</svg>

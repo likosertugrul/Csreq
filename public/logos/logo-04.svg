@@ -1,0 +1,16 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning dotted ring -->
+  <g>
+    <circle cx="40" cy="40" r="35" stroke="#e07830" stroke-width="1.5" stroke-dasharray="2 9" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="6s" repeatCount="indefinite"/>
+  </g>
+  <!-- Quill shaft -->
+  <line x1="40" y1="15" x2="40" y2="63" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Left vane -->
+  <path d="M40 15 C20 25 18 44 40 57" stroke="#e07830" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Right vane -->
+  <path d="M40 15 C60 25 62 44 40 57" stroke="#e07830" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Nib split -->
+  <line x1="37" y1="59" x2="40" y2="65" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="43" y1="59" x2="40" y2="65" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

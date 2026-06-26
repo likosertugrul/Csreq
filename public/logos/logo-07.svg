@@ -1,0 +1,16 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Spinning ring with large gap (arc feel) -->
+  <g>
+    <circle cx="40" cy="40" r="36" stroke="#e07830" stroke-width="2" stroke-dasharray="72 41" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="5s" repeatCount="indefinite"/>
+  </g>
+  <!-- Document rectangle -->
+  <rect x="22" y="16" width="36" height="48" rx="3" stroke="#e07830" stroke-width="1.5"/>
+  <!-- Folded corner -->
+  <path d="M46 16 L58 28" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M46 16 L46 28 L58 28" stroke="#e07830" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+  <!-- Text lines -->
+  <line x1="28" y1="36" x2="48" y2="36" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="28" y1="43" x2="50" y2="43" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="28" y1="50" x2="42" y2="50" stroke="#e07830" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
