@@ -9,13 +9,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "E-posta ve şifre gerekli" }, { status: 400 });
   }
 
-  const db = getDb();
-  const user = db.prepare("SELECT id, password_hash, email_verified FROM users WHERE email = ?").get(email) as { id: string; password_hash: string; email_verified: number } | undefined;
-  if (!user || !(await compare(password, user.password_hash))) {
+  const db = await getDb();
+  const user = (await db.execute({
+    sql: "SELECT id, password_hash, email_verified FROM users WHERE email = ?",
+    args: [email],
+  })).rows[0] as unknown as { id: string; password_hash: string; email_verified: number } | undefined;
+
+  if (!user || !(await compare(password, user.password_hash as string))) {
     return NextResponse.json({ error: "E-posta veya şifre hatalı" }, { status: 401 });
   }
 
-  const token = await createSession(user.id);
+  const token = await createSession(user.id as string);
   const res = NextResponse.json({
     success: true,
     email,

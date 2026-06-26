@@ -16,15 +16,18 @@ export async function POST(req: NextRequest) {
   const userId = await getSessionUserId();
 
   if (userId) {
-    const db = getDb();
-    const user = db.prepare("SELECT email, email_verified, letters_used, plan, plan_expires_at FROM users WHERE id = ?").get(userId) as {
+    const db = await getDb();
+    const user = (await db.execute({
+      sql: "SELECT email, email_verified, letters_used, plan, plan_expires_at FROM users WHERE id = ?",
+      args: [userId],
+    })).rows[0] as unknown as {
       email: string; email_verified: number; letters_used: number; plan: string; plan_expires_at: number | null;
     } | undefined;
 
     if (!user || user.email_verified !== 1) {
       return NextResponse.json({ error: "E-posta doğrulanmamış" }, { status: 403 });
     }
-    if (!isProUser(user) && user.letters_used >= FREE_LIMIT) {
+    if (!isProUser(user as { plan: string; plan_expires_at: number | null; email: string }) && (user.letters_used as number) >= FREE_LIMIT) {
       return NextResponse.json({ error: "limit_reached", lettersUsed: user.letters_used }, { status: 402 });
     }
   }
@@ -60,10 +63,13 @@ export async function POST(req: NextRequest) {
 
     // Increment counter for logged-in free users
     if (userId) {
-      const db = getDb();
-      const user = db.prepare("SELECT email, plan, plan_expires_at FROM users WHERE id = ?").get(userId) as { email: string; plan: string; plan_expires_at: number | null } | undefined;
-      if (user && !isProUser(user)) {
-        db.prepare("UPDATE users SET letters_used = letters_used + 1 WHERE id = ?").run(userId);
+      const db = await getDb();
+      const user = (await db.execute({
+        sql: "SELECT email, plan, plan_expires_at FROM users WHERE id = ?",
+        args: [userId],
+      })).rows[0] as unknown as { email: string; plan: string; plan_expires_at: number | null } | undefined;
+      if (user && !isProUser(user as { plan: string; plan_expires_at: number | null; email: string })) {
+        await db.execute({ sql: "UPDATE users SET letters_used = letters_used + 1 WHERE id = ?", args: [userId] });
       }
     }
 

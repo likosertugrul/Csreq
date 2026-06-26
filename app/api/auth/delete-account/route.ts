@@ -6,11 +6,11 @@ export async function DELETE() {
   const userId = await getSessionUserId();
   if (!userId) return NextResponse.json({ error: "Oturum açılmamış" }, { status: 401 });
 
-  const db = getDb();
-  db.prepare("DELETE FROM pending_sessions WHERE user_id = ?").run(userId);
-  db.prepare("DELETE FROM verification_tokens WHERE user_id = ?").run(userId);
-  db.prepare("DELETE FROM user_profiles WHERE user_id = ?").run(userId);
-  db.prepare("DELETE FROM users WHERE id = ?").run(userId);
+  const db = await getDb();
+  await db.execute({ sql: "DELETE FROM pending_sessions WHERE user_id = ?", args: [userId] });
+  await db.execute({ sql: "DELETE FROM verification_tokens WHERE user_id = ?", args: [userId] });
+  await db.execute({ sql: "DELETE FROM user_profiles WHERE user_id = ?", args: [userId] });
+  await db.execute({ sql: "DELETE FROM users WHERE id = ?", args: [userId] });
 
   const res = NextResponse.json({ success: true });
   res.cookies.set(clearCookieOptions());

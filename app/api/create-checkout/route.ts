@@ -19,9 +19,12 @@ export async function POST(req: NextRequest) {
   let email = "";
   const userId = await getSessionUserId();
   if (userId) {
-    const db = getDb();
-    const user = db.prepare("SELECT email FROM users WHERE id = ?").get(userId) as { email: string } | undefined;
-    if (user) email = user.email;
+    const db = await getDb();
+    const user = (await db.execute({
+      sql: "SELECT email FROM users WHERE id = ?",
+      args: [userId],
+    })).rows[0] as unknown as { email: string } | undefined;
+    if (user) email = user.email as string;
   }
 
   const url = email

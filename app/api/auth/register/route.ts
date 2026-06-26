@@ -16,11 +16,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Geçersiz e-posta veya şifre (min 6 karakter)" }, { status: 400 });
   }
 
-  const db = getDb();
-  const existing = db.prepare("SELECT id, google_id FROM users WHERE email = ?").get(email) as { id: string; google_id: string | null } | undefined;
+  const db = await getDb();
+  const existing = (await db.execute({
+    sql: "SELECT id, google_id FROM users WHERE email = ?",
+    args: [email],
+  })).rows[0] as unknown as { id: string; google_id: string | null } | undefined;
+
   if (existing) {
-    if (existing.google_id && !db.prepare("SELECT id FROM users WHERE email = ? AND password_hash IS NOT NULL").get(email)) {
-      return NextResponse.json({ error: "Bu e-posta Google ile bağlı. Google ile giriş yap." }, { status: 409 });
+    if (existing.google_id) {
+      const hasPassword = (await db.execute({
+        sql: "SELECT id FROM users WHERE email = ? AND password_hash IS NOT NULL",
+        args: [email],
+      })).rows[0];
+      if (!hasPassword) {
+        return NextResponse.json({ error: "Bu e-posta Google ile bağlı. Google ile giriş yap." }, { status: 409 });
+      }
     }
     return NextResponse.json({ error: "Bu e-posta zaten kayıtlı" }, { status: 409 });
   }
@@ -28,9 +38,12 @@ export async function POST(req: NextRequest) {
   const id = randomUUID();
   const password_hash = await hash(password, 10);
   const isAdmin = ADMIN_EMAILS.has(email);
-  db.prepare("INSERT INTO users (id, email, password_hash, email_verified, created_at) VALUES (?, ?, ?, ?, ?)").run(id, email, password_hash, isAdmin ? 1 : 0, Date.now());
+  await db.execute({
+    sql: "INSERT INTO users (id, email, password_hash, email_verified, created_at) VALUES (?, ?, ?, ?, ?)",
+    args: [id, email, password_hash, isAdmin ? 1 : 0, Date.now()],
+  });
   if (isAdmin) {
-    db.prepare("UPDATE users SET plan = 'pro', plan_expires_at = NULL WHERE id = ?").run(id);
+    await db.execute({ sql: "UPDATE users SET plan = 'pro', plan_expires_at = NULL WHERE id = ?", args: [id] });
   }
 
   const session = await createSession(id);
@@ -43,7 +56,10 @@ export async function POST(req: NextRequest) {
 
   const token = randomUUID();
   const code = genCode();
-  db.prepare("INSERT INTO verification_tokens (token, user_id, expires_at, code) VALUES (?, ?, ?, ?)").run(token, id, Date.now() + 86400000, code);
+  await db.execute({
+    sql: "INSERT INTO verification_tokens (token, user_id, expires_at, code) VALUES (?, ?, ?, ?)",
+    args: [token, id, Date.now() + 86400000, code],
+  });
   try {
     await sendVerificationEmail(email, token, code);
   } catch (err) {

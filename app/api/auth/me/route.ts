@@ -7,11 +7,17 @@ export async function GET() {
   const userId = await getSessionUserId();
   if (!userId) return NextResponse.json({ user: null });
 
-  const db = getDb();
-  const user = db.prepare("SELECT id, email, email_verified, letters_used, plan, plan_expires_at FROM users WHERE id = ?").get(userId) as { id: string; email: string; email_verified: number; letters_used: number; plan: string; plan_expires_at: number | null } | undefined;
+  const db = await getDb();
+  const user = (await db.execute({
+    sql: "SELECT id, email, email_verified, letters_used, plan, plan_expires_at FROM users WHERE id = ?",
+    args: [userId],
+  })).rows[0] as unknown as { id: string; email: string; email_verified: number; letters_used: number; plan: string; plan_expires_at: number | null } | undefined;
   if (!user) return NextResponse.json({ user: null });
 
-  const profile = db.prepare("SELECT name, hometown, purpose, interests, notes, home_text, refs_text FROM user_profiles WHERE user_id = ?").get(userId) as {
+  const profile = (await db.execute({
+    sql: "SELECT name, hometown, purpose, interests, notes, home_text, refs_text FROM user_profiles WHERE user_id = ?",
+    args: [userId],
+  })).rows[0] as unknown as {
     name: string; hometown: string; purpose: string; interests: string; notes: string; home_text: string; refs_text: string;
   } | undefined;
 
@@ -31,7 +37,7 @@ export async function GET() {
       } : null,
       lettersUsed: user.letters_used ?? 0,
       plan: user.plan ?? "free",
-      isPro: ADMIN_EMAILS.has(user.email) || (user.plan === "pro" && (!user.plan_expires_at || user.plan_expires_at > Date.now())),
+      isPro: ADMIN_EMAILS.has(user.email as string) || (user.plan === "pro" && (!user.plan_expires_at || (user.plan_expires_at as number) > Date.now())),
     },
   });
 }

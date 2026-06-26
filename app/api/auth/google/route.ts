@@ -11,8 +11,8 @@ export async function GET() {
   }
 
   const state = randomUUID();
-  const db = getDb();
-  db.prepare("INSERT INTO oauth_states (state, expires_at) VALUES (?, ?)").run(state, Date.now() + 600000); // 10 min
+  const db = await getDb();
+  await db.execute({ sql: "INSERT INTO oauth_states (state, expires_at) VALUES (?, ?)", args: [state, Date.now() + 600000] });
 
   const params = new URLSearchParams({
     client_id: CLIENT_ID,

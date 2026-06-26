@@ -44,23 +44,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing plan_type or user_email" }, { status: 400 });
   }
 
-  const db = getDb();
-  const user = db.prepare("SELECT id FROM users WHERE email = ?").get(userEmail) as { id: string } | undefined;
+  const db = await getDb();
+  const user = (await db.execute({
+    sql: "SELECT id FROM users WHERE email = ?",
+    args: [userEmail],
+  })).rows[0] as unknown as { id: string } | undefined;
+
   if (!user) {
-    // User might not have signed up yet — log and ignore
     console.warn("[lemon webhook] No user found for email:", userEmail);
     return NextResponse.json({ ok: true });
   }
 
   const planExpiresAt = planType === "monthly" ? Date.now() + 31 * 24 * 60 * 60 * 1000 : null;
 
-  db.prepare("UPDATE users SET plan = 'pro', plan_expires_at = ? WHERE id = ?").run(planExpiresAt, user.id);
+  await db.execute({
+    sql: "UPDATE users SET plan = 'pro', plan_expires_at = ? WHERE id = ?",
+    args: [planExpiresAt, user.id],
+  });
 
   try {
-    db.prepare(`INSERT OR IGNORE INTO payments (id, user_id, lemon_order_id, plan_type, amount, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)`).run(
-      crypto.randomUUID(), user.id, orderId, planType, totalCents, Date.now()
-    );
+    await db.execute({
+      sql: "INSERT OR IGNORE INTO payments (id, user_id, lemon_order_id, plan_type, amount, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+      args: [crypto.randomUUID(), user.id, orderId, planType, totalCents, Date.now()],
+    });
   } catch (e) {
     console.error("[lemon webhook] Payment insert failed:", e);
   }
