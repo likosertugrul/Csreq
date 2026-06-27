@@ -21,17 +21,28 @@ const GoogleIcon = () => (
 );
 
 export default function AuthModal({ t, onSuccess, onClose, verifyBanner }: Props) {
-  const [tab, setTab] = useState<"login" | "register">("login");
+  const [tab, setTab] = useState<"login" | "register" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
+      if (tab === "forgot") {
+        await fetch("/api/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim() }),
+        });
+        setForgotSent(true);
+        setLoading(false);
+        return;
+      }
       const endpoint = tab === "login" ? "/api/auth/login" : "/api/auth/register";
       const res = await fetch(endpoint, {
         method: "POST",
@@ -103,105 +114,162 @@ export default function AuthModal({ t, onSuccess, onClose, verifyBanner }: Props
         <div style={{ marginBottom: "1.5rem" }}>
           <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.5rem", fontWeight: 400, color: "var(--color-ink)", marginBottom: "0.3rem" }}>csreq</p>
           <p style={{ fontSize: "0.8rem", color: "var(--color-ink-muted)" }}>
-            {tab === "login" ? t.authLoginSubtitle : t.authRegisterSubtitle}
+            {tab === "login" ? t.authLoginSubtitle : tab === "register" ? t.authRegisterSubtitle : t.authForgotTitle}
           </p>
         </div>
 
-        {/* Google button */}
-        <a
-          href="/api/auth/google"
-          style={{
-            display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-            width: "100%", padding: "10px 16px",
-            background: "#fff", color: "#1a1a1a",
-            border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
-            fontSize: "0.875rem", fontWeight: 500, cursor: "pointer",
-            textDecoration: "none", transition: "opacity 0.15s",
-            boxSizing: "border-box",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-        >
-          <GoogleIcon />
-          {t.authGoogleBtn}
-        </a>
-
-        {/* Divider */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "1.25rem 0" }}>
-          <div style={{ flex: 1, height: "1px", background: "var(--color-edge)" }} />
-          <span style={{ fontSize: "0.7rem", color: "var(--color-ink-muted)", letterSpacing: "0.05em" }}>{t.authOrDivider}</span>
-          <div style={{ flex: 1, height: "1px", background: "var(--color-edge)" }} />
-        </div>
-
-        {/* Tab switcher */}
-        <div style={{ display: "flex", gap: "2px", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "10px", padding: "3px", marginBottom: "1.25rem" }}>
-          {(["login", "register"] as const).map(s => (
-            <button key={s} type="button" onClick={() => { setTab(s); setError(""); }}
-              style={{
-                flex: 1, padding: "7px", fontSize: "0.78rem", fontWeight: 600,
-                border: "none", borderRadius: "8px", cursor: "pointer", transition: "all 0.15s",
-                background: tab === s ? "var(--color-surface-2)" : "transparent",
-                color: tab === s ? "var(--color-ink)" : "var(--color-ink-muted)",
-                boxShadow: tab === s ? "0 1px 4px rgba(0,0,0,0.3)" : "none",
-              }}
+        {/* Forgot password view */}
+        {tab === "forgot" ? (
+          <div>
+            <button
+              type="button"
+              onClick={() => { setTab("login"); setError(""); setForgotSent(false); }}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-ink-muted)", fontSize: "0.8rem", padding: "0 0 1rem", display: "flex", alignItems: "center", gap: "4px" }}
             >
-              {s === "login" ? t.authLoginTab : t.authRegisterTab}
+              {t.authForgotBack}
             </button>
-          ))}
-        </div>
-
-        <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-          <div>
-            <label style={{ display: "block", fontSize: "0.68rem", color: "var(--color-ink-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500, marginBottom: "0.35rem" }}>
-              {t.authEmail}
-            </label>
-            <input
-              type="email" placeholder="ornek@email.com" value={email} required autoFocus
-              onChange={e => setEmail(e.target.value)}
-              style={inputStyle}
-              onFocus={e => (e.target.style.borderColor = "var(--color-amber)")}
-              onBlur={e => (e.target.style.borderColor = "var(--color-edge)")}
-            />
+            {forgotSent ? (
+              <div style={{ background: "rgba(52,168,83,0.1)", border: "1px solid rgba(52,168,83,0.3)", borderRadius: "10px", padding: "14px 16px", fontSize: "0.82rem", color: "#4caf74", lineHeight: 1.5 }}>
+                ✓ {t.authForgotSent}
+              </div>
+            ) : (
+              <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                <p style={{ fontSize: "0.8rem", color: "var(--color-ink-muted)", margin: "0 0 0.5rem", lineHeight: 1.5 }}>{t.authForgotDesc}</p>
+                <input
+                  type="email" placeholder="ornek@email.com" value={email} required autoFocus
+                  onChange={e => setEmail(e.target.value)}
+                  style={inputStyle}
+                  onFocus={e => (e.target.style.borderColor = "var(--color-amber)")}
+                  onBlur={e => (e.target.style.borderColor = "var(--color-edge)")}
+                />
+                <button
+                  type="submit" disabled={loading}
+                  style={{
+                    padding: "0.8rem",
+                    background: loading ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, var(--color-amber) 0%, var(--color-amber-hi) 100%)",
+                    color: loading ? "var(--color-ink-muted)" : "#fff",
+                    fontWeight: 600, fontSize: "0.875rem",
+                    border: "none", borderRadius: "12px",
+                    cursor: loading ? "not-allowed" : "pointer",
+                    transition: "all 0.2s",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                  }}
+                >
+                  {loading ? <><span style={{ width: "14px", height: "14px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />{t.authLoading}</> : t.authForgotBtn}
+                </button>
+              </form>
+            )}
           </div>
-          <div>
-            <label style={{ display: "block", fontSize: "0.68rem", color: "var(--color-ink-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500, marginBottom: "0.35rem" }}>
-              {t.authPassword}
-            </label>
-            <input
-              type="password" value={password} required
-              placeholder={tab === "register" ? t.authPasswordHint : "••••••••"}
-              onChange={e => setPassword(e.target.value)}
-              style={inputStyle}
-              onFocus={e => (e.target.style.borderColor = "var(--color-amber)")}
-              onBlur={e => (e.target.style.borderColor = "var(--color-edge)")}
-            />
-          </div>
+        ) : (
+          <>
+            {/* Google button */}
+            <a
+              href="/api/auth/google"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
+                width: "100%", padding: "10px 16px",
+                background: "#fff", color: "#1a1a1a",
+                border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
+                fontSize: "0.875rem", fontWeight: 500, cursor: "pointer",
+                textDecoration: "none", transition: "opacity 0.15s",
+                boxSizing: "border-box",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            >
+              <GoogleIcon />
+              {t.authGoogleBtn}
+            </a>
 
-          {error && (
-            <p style={{ fontSize: "0.75rem", color: "#e07070", margin: 0, padding: "8px 12px", background: "rgba(220,60,60,0.08)", borderRadius: "8px" }}>
-              {error}
-            </p>
-          )}
+            {/* Divider */}
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "1.25rem 0" }}>
+              <div style={{ flex: 1, height: "1px", background: "var(--color-edge)" }} />
+              <span style={{ fontSize: "0.7rem", color: "var(--color-ink-muted)", letterSpacing: "0.05em" }}>{t.authOrDivider}</span>
+              <div style={{ flex: 1, height: "1px", background: "var(--color-edge)" }} />
+            </div>
 
-          <button
-            type="submit" disabled={loading}
-            style={{
-              marginTop: "0.15rem", padding: "0.8rem",
-              background: loading ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, var(--color-amber) 0%, var(--color-amber-hi) 100%)",
-              color: loading ? "var(--color-ink-muted)" : "#fff",
-              fontWeight: 600, fontSize: "0.875rem",
-              border: "none", borderRadius: "12px",
-              cursor: loading ? "not-allowed" : "pointer",
-              boxShadow: loading ? "none" : "0 4px 16px rgba(224,120,48,0.3)",
-              transition: "all 0.2s",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-            }}
-          >
-            {loading ? (
-              <><span style={{ width: "14px", height: "14px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />{t.authLoading}</>
-            ) : tab === "login" ? t.authLoginBtn : t.authRegisterBtn}
-          </button>
-        </form>
+            {/* Tab switcher */}
+            <div style={{ display: "flex", gap: "2px", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "10px", padding: "3px", marginBottom: "1.25rem" }}>
+              {(["login", "register"] as const).map(s => (
+                <button key={s} type="button" onClick={() => { setTab(s); setError(""); }}
+                  style={{
+                    flex: 1, padding: "7px", fontSize: "0.78rem", fontWeight: 600,
+                    border: "none", borderRadius: "8px", cursor: "pointer", transition: "all 0.15s",
+                    background: tab === s ? "var(--color-surface-2)" : "transparent",
+                    color: tab === s ? "var(--color-ink)" : "var(--color-ink-muted)",
+                    boxShadow: tab === s ? "0 1px 4px rgba(0,0,0,0.3)" : "none",
+                  }}
+                >
+                  {s === "login" ? t.authLoginTab : t.authRegisterTab}
+                </button>
+              ))}
+            </div>
+
+            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "0.68rem", color: "var(--color-ink-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500, marginBottom: "0.35rem" }}>
+                  {t.authEmail}
+                </label>
+                <input
+                  type="email" placeholder="ornek@email.com" value={email} required autoFocus
+                  onChange={e => setEmail(e.target.value)}
+                  style={inputStyle}
+                  onFocus={e => (e.target.style.borderColor = "var(--color-amber)")}
+                  onBlur={e => (e.target.style.borderColor = "var(--color-edge)")}
+                />
+              </div>
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
+                  <label style={{ display: "block", fontSize: "0.68rem", color: "var(--color-ink-muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500 }}>
+                    {t.authPassword}
+                  </label>
+                  {tab === "login" && (
+                    <button
+                      type="button"
+                      onClick={() => { setTab("forgot"); setError(""); setForgotSent(false); }}
+                      style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.7rem", color: "var(--color-ink-muted)", padding: 0, textDecoration: "underline", textUnderlineOffset: "2px" }}
+                    >
+                      {t.authForgotLink}
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="password" value={password} required
+                  placeholder={tab === "register" ? t.authPasswordHint : "••••••••"}
+                  onChange={e => setPassword(e.target.value)}
+                  style={inputStyle}
+                  onFocus={e => (e.target.style.borderColor = "var(--color-amber)")}
+                  onBlur={e => (e.target.style.borderColor = "var(--color-edge)")}
+                />
+              </div>
+
+              {error && (
+                <p style={{ fontSize: "0.75rem", color: "#e07070", margin: 0, padding: "8px 12px", background: "rgba(220,60,60,0.08)", borderRadius: "8px" }}>
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit" disabled={loading}
+                style={{
+                  marginTop: "0.15rem", padding: "0.8rem",
+                  background: loading ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, var(--color-amber) 0%, var(--color-amber-hi) 100%)",
+                  color: loading ? "var(--color-ink-muted)" : "#fff",
+                  fontWeight: 600, fontSize: "0.875rem",
+                  border: "none", borderRadius: "12px",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  boxShadow: loading ? "none" : "0 4px 16px rgba(224,120,48,0.3)",
+                  transition: "all 0.2s",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                }}
+              >
+                {loading ? (
+                  <><span style={{ width: "14px", height: "14px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />{t.authLoading}</>
+                ) : tab === "login" ? t.authLoginBtn : t.authRegisterBtn}
+              </button>
+            </form>
+          </>
+        )}
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

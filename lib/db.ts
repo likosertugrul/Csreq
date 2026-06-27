@@ -54,6 +54,11 @@ export async function getDb(): Promise<Client> {
       created_at INTEGER NOT NULL,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
+    `CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      token TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      expires_at INTEGER NOT NULL
+    )`,
   ]) {
     try { await _db.execute(sql); } catch {}
   }

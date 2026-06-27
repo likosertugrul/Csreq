@@ -14,6 +14,32 @@ function getTransport() {
   return null;
 }
 
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const url = `${APP_URL}/reset-password?token=${token}`;
+  const from = process.env.SMTP_FROM ?? "csreq <noreply@csreq.app>";
+
+  const transport = getTransport();
+  if (!transport) {
+    console.log(`\n[csreq] Password reset link for ${email}: ${url}\n`);
+    return;
+  }
+
+  await transport.sendMail({
+    from,
+    to: email,
+    subject: "csreq — Şifre sıfırlama",
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:440px;margin:0 auto;padding:40px 24px;background:#111;color:#F0EBE4;border-radius:16px">
+        <p style="font-size:1.5rem;font-weight:400;margin:0 0 8px">csreq</p>
+        <p style="color:#8a7f75;margin:0 0 32px;font-size:0.9rem">Şifre sıfırlama</p>
+        <p style="font-size:0.875rem;color:#F0EBE4;margin:0 0 24px">Şifreni sıfırlamak için aşağıdaki butona tıkla. Link 1 saat geçerlidir.</p>
+        <a href="${url}" style="display:inline-block;padding:12px 28px;background:#E07830;color:#fff;text-decoration:none;border-radius:10px;font-weight:600;font-size:0.875rem">Şifremi Sıfırla →</a>
+        <p style="margin-top:32px;font-size:0.72rem;color:#5a5048">Bu isteği sen yapmadıysan bu e-postayı görmezden gelebilirsin.</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendVerificationEmail(email: string, token: string, code: string) {
   const url = `${APP_URL}/api/auth/verify-email?token=${token}`;
   const from = process.env.SMTP_FROM ?? "csreq <noreply@csreq.app>";
