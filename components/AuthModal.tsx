@@ -244,9 +244,28 @@ export default function AuthModal({ t, onSuccess, onClose, verifyBanner }: Props
               </div>
 
               {error && (
-                <p style={{ fontSize: "0.75rem", color: "#e07070", margin: 0, padding: "8px 12px", background: "rgba(220,60,60,0.08)", borderRadius: "8px" }}>
-                  {error}
-                </p>
+                error.includes("Google") ? (
+                  <div style={{ padding: "10px 12px", background: "rgba(66,133,244,0.08)", border: "1px solid rgba(66,133,244,0.25)", borderRadius: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <p style={{ fontSize: "0.75rem", color: "#7aaaf0", margin: 0 }}>Bu e-posta Google ile kayıtlı.</p>
+                    <a
+                      href="/api/auth/google"
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                        padding: "8px 14px", background: "#fff", color: "#1a1a1a",
+                        border: "none", borderRadius: "8px", fontSize: "0.82rem", fontWeight: 600,
+                        textDecoration: "none", transition: "opacity 0.15s",
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                    >
+                      <GoogleIcon /> Google ile giriş yap →
+                    </a>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: "0.75rem", color: "#e07070", margin: 0, padding: "8px 12px", background: "rgba(220,60,60,0.08)", borderRadius: "8px" }}>
+                    {error}
+                  </p>
+                )
               )}
 
               <button
