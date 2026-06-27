@@ -12,10 +12,16 @@ export async function POST(req: NextRequest) {
   const db = await getDb();
   const user = (await db.execute({
     sql: "SELECT id, password_hash, email_verified FROM users WHERE email = ?",
-    args: [email],
-  })).rows[0] as unknown as { id: string; password_hash: string; email_verified: number } | undefined;
+    args: [email.trim().toLowerCase()],
+  })).rows[0] as unknown as { id: string; password_hash: string | null; email_verified: number } | undefined;
 
-  if (!user || !(await compare(password, user.password_hash as string))) {
+  if (!user) {
+    return NextResponse.json({ error: "E-posta veya şifre hatalı" }, { status: 401 });
+  }
+  if (!user.password_hash) {
+    return NextResponse.json({ error: "Bu hesap Google ile oluşturuldu. Google butonu ile giriş yap." }, { status: 401 });
+  }
+  if (!(await compare(password, user.password_hash as string))) {
     return NextResponse.json({ error: "E-posta veya şifre hatalı" }, { status: 401 });
   }
 
