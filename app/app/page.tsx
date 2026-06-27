@@ -492,10 +492,10 @@ function PageInner() {
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
                 <span style={{ fontSize: "0.68rem", color: "var(--color-ink-muted)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                  Karakter Limiti
+                  {t.charLimitLabel}
                 </span>
                 <span style={{ fontSize: "0.65rem", color: "var(--color-ink-muted)" }}>
-                  · CS sitesinin limiti 995 karakter
+                  {t.charLimitNote}
                 </span>
               </div>
               <div style={{ display: "flex", gap: "4px" }}>
