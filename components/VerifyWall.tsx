@@ -62,7 +62,7 @@ export default function VerifyWall({ t, email, onVerified, onLogout }: Props) {
       if (!res.ok) { setError(data.error || t.authVerifyInvalidCode); return; }
       onVerified();
     } catch {
-      setError("Bağlantı hatası");
+      setError(t.authConnError);
     } finally {
       setLoading(false);
     }
@@ -171,7 +171,7 @@ export default function VerifyWall({ t, email, onVerified, onLogout }: Props) {
           }}
         >
           {loading ? (
-            <><span style={{ width: "14px", height: "14px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />Doğrulanıyor...</>
+            <><span style={{ width: "14px", height: "14px", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />{t.authVerifying}</>
           ) : t.authVerifyCodeBtn}
         </button>
 

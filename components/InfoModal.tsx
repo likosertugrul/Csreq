@@ -112,7 +112,7 @@ export default function InfoModal({ t, onClose, onSignIn }: Props) {
             onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--color-edge-hi)"; e.currentTarget.style.color = "var(--color-ink)"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--color-edge)"; e.currentTarget.style.color = "var(--color-ink-muted)"; }}
           >
-            Devam Et
+            {t.infoModalSkip}
           </button>
         </div>
       </div>

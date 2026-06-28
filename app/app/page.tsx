@@ -277,6 +277,7 @@ function PageInner() {
 
       {showPaywall && (
         <PaywallModal
+          t={t}
           onClose={() => setShowPaywall(false)}
           onSignIn={() => { setShowPaywall(false); setShowAuth(true); }}
           isGuest={isGuest}

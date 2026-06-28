@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import type { T } from "@/lib/i18n";
 
 type Props = {
+  t: T;
   onClose: () => void;
   onSignIn: () => void;
   isGuest: boolean;
   lettersUsed: number;
 };
 
-export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }: Props) {
+export default function PaywallModal({ t, onClose, onSignIn, isGuest, lettersUsed }: Props) {
   const [loadingPlan, setLoadingPlan] = useState<"monthly" | "lifetime" | null>(null);
   const [error, setError] = useState("");
 
@@ -26,13 +28,13 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
       const data = await res.json();
       if (!res.ok) {
         setError(data.error === "Payment not configured yet"
-          ? "Payment coming soon — check back shortly."
-          : "Something went wrong. Try again.");
+          ? t.paywallComingSoon
+          : t.paywallError);
         return;
       }
       window.open(data.url, "_blank");
     } catch {
-      setError("Connection error. Try again.");
+      setError(t.authConnError);
     } finally {
       setLoadingPlan(null);
     }
@@ -87,16 +89,14 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
               ))}
             </div>
             <span style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)" }}>
-              {lettersUsed}/5 free letters used
+              {lettersUsed}{t.paywallUsed}
             </span>
           </div>
           <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", fontWeight: 400, color: "var(--color-ink)", lineHeight: 1.2, letterSpacing: "-0.01em" }}>
-            You've used your free letters.
+            {t.paywallTitle}
           </h2>
           <p style={{ fontSize: "0.82rem", color: "var(--color-ink-muted)", marginTop: "0.4rem", lineHeight: 1.6 }}>
-            {isGuest
-              ? "Create a free account to continue, then pick a plan."
-              : "Upgrade to keep writing personalized couch request letters."}
+            {isGuest ? t.paywallGuestDesc : t.paywallUserDesc}
           </p>
         </div>
 
@@ -114,10 +114,10 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "none"; }}
             >
-              Create free account →
+              {t.paywallGuestCta}
             </button>
             <p style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)", textAlign: "center" }}>
-              Free account required before upgrading
+              {t.paywallGuestNote}
             </p>
           </div>
         ) : (
@@ -133,13 +133,13 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
                 background: "var(--color-amber)", color: "#fff",
                 fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
                 padding: "2px 10px", borderRadius: "100px",
-              }}>Recommended</div>
+              }}>{t.paywallRecommended}</div>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "0.6rem" }}>
-                <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--color-ink)" }}>Lifetime</span>
+                <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--color-ink)" }}>{t.paywallLifetimeLabel}</span>
                 <span style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--color-amber)" }}>$25</span>
               </div>
               <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", marginBottom: "0.85rem", lineHeight: 1.5 }}>
-                Unlimited letters, forever. One payment, no subscriptions.
+                {t.paywallLifetimeDesc}
               </p>
               <button
                 onClick={() => checkout("lifetime")}
@@ -154,21 +154,21 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
                   opacity: loadingPlan && loadingPlan !== "lifetime" ? 0.5 : 1,
                 }}
               >
-                {loadingPlan === "lifetime" ? "Opening checkout..." : "Get lifetime access →"}
+                {loadingPlan === "lifetime" ? t.paywallCheckoutLoading : t.paywallLifetimeCta}
               </button>
             </div>
 
             {/* Monthly */}
             <div style={{ border: "1px solid var(--color-edge)", borderRadius: "14px", padding: "1.25rem" }}>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "0.6rem" }}>
-                <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--color-ink)" }}>Monthly</span>
+                <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--color-ink)" }}>{t.paywallMonthlyLabel}</span>
                 <div style={{ textAlign: "right" }}>
                   <span style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--color-ink)" }}>$5</span>
                   <span style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)" }}>/mo</span>
                 </div>
               </div>
               <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", marginBottom: "0.85rem", lineHeight: 1.5 }}>
-                Unlimited letters. Cancel anytime.
+                {t.paywallMonthlyDesc}
               </p>
               <button
                 onClick={() => checkout("monthly")}
@@ -183,7 +183,7 @@ export default function PaywallModal({ onClose, onSignIn, isGuest, lettersUsed }
                 onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--color-amber)"; e.currentTarget.style.color = "var(--color-amber)"; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--color-edge-hi)"; e.currentTarget.style.color = "var(--color-ink)"; }}
               >
-                {loadingPlan === "monthly" ? "Opening checkout..." : "Subscribe monthly →"}
+                {loadingPlan === "monthly" ? t.paywallCheckoutLoading : t.paywallMonthlyCta}
               </button>
             </div>
 
