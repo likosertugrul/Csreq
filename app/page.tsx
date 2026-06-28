@@ -245,7 +245,7 @@ function LetterModal({ letter, host, onClose, copyLabel, copiedLabel, badge }: {
 export default function LandingPage() {
   const [openLetter, setOpenLetter] = useState<number | null>(null);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [lang, setLang] = useState<LandingLang>("TR");
+  const [lang, setLang] = useState<LandingLang>("EN");
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -256,7 +256,6 @@ export default function LandingPage() {
     }
     const savedLang = localStorage.getItem("csreq_app_lang") as LandingLang | null;
     if (savedLang === "TR" || savedLang === "EN") setLang(savedLang);
-    else if (savedLang) setLang("EN");
   }, []);
 
   const lt = LT[lang] ?? LT.EN;
@@ -691,7 +690,19 @@ export default function LandingPage() {
       <footer style={{ borderTop: "1px solid var(--color-edge)", padding: "2rem 1.5rem" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <span style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", fontWeight: 500, color: "var(--color-ink-muted)" }}>csreq</span>
-          <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)" }}>{lt.footerText}</p>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", flexWrap: "wrap" }}>
+            <a
+              href="https://likosertugrul.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", textDecoration: "none", transition: "color 0.15s" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--color-ink)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--color-ink-muted)")}
+            >
+              by likosertugrul.com
+            </a>
+            <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", margin: 0 }}>{lt.footerText}</p>
+          </div>
         </div>
       </footer>
     </>

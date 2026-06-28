@@ -85,20 +85,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             description: "Write personalized CouchSurfing couch request letters in seconds. AI-powered, human-sounding, 25 languages.",
             applicationCategory: "UtilityApplication",
             operatingSystem: "Web",
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "USD",
-              description: "5 free letters, no credit card required",
-            },
-            featureList: [
-              "Personalized CouchSurfing request letters",
-              "25 language support",
-              "AI writing pattern detection and removal",
-              "Host profile analysis",
-              "Character limit enforcement",
-              "Host condition warnings",
+            offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "5 free letters, no credit card required" },
+            featureList: ["Personalized CouchSurfing request letters","25 language support","AI writing pattern detection","Host profile analysis","Character limit enforcement","Host condition warnings"],
+          }) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "How do I write a good CouchSurfing couch request?", acceptedAnswer: { "@type": "Answer", text: "A good CouchSurfing request references specific details from the host's profile, stays under 995 characters (the platform's limit), avoids generic AI phrases, and ends with a genuine question. csreq handles all of this automatically." } },
+              { "@type": "Question", name: "What is the character limit for CouchSurfing requests?", acceptedAnswer: { "@type": "Answer", text: "CouchSurfing cuts off request messages at 995 characters. csreq enforces this limit server-side, trimming at a natural sentence boundary so your message always reads as complete." } },
+              { "@type": "Question", name: "Why do CouchSurfing requests get rejected?", acceptedAnswer: { "@type": "Answer", text: "Most requests are rejected because they're generic and could be sent to anyone. Hosts value personalization — referencing their specific interests, home description, or travel philosophy. csreq reads the host's actual profile to write a letter tailored to them." } },
+              { "@type": "Question", name: "Can I write a CouchSurfing request in different languages?", acceptedAnswer: { "@type": "Answer", text: "Yes. csreq supports 25 languages. You can write your letter in the host's native language or any language you prefer." } },
+              { "@type": "Question", name: "Is csreq free?", acceptedAnswer: { "@type": "Answer", text: "csreq offers 5 free letters with no credit card required. Pro plans are available for unlimited letters." } },
             ],
+          }) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "How to Write a CouchSurfing Couch Request",
+            description: "Write a personalized, accepted CouchSurfing request in 3 steps using csreq.",
+            step: [
+              { "@type": "HowToStep", position: 1, name: "Paste the host's profile", text: "Copy the text from the host's CouchSurfing page — profile, home section, or references — and paste it into csreq." },
+              { "@type": "HowToStep", position: 2, name: "Pick your dates", text: "Set your arrival and departure. The letter automatically mentions how long you plan to stay." },
+              { "@type": "HowToStep", position: 3, name: "Read and send your letter", text: "A personalized, human-sounding letter appears in seconds. Edit freely, copy, and paste it into CouchSurfing." },
+            ],
+            totalTime: "PT1M",
+            tool: [{ "@type": "HowToTool", name: "csreq", url: "https://csreq.likosertugrul.com" }],
           }) }}
         />
         <div className="noise" aria-hidden="true" />
