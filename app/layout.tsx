@@ -30,18 +30,22 @@ export const metadata: Metadata = {
     template: "%s | csreq",
   },
   description:
-    "Write a personalized CouchSurfing couch request in seconds. Paste the host's profile, pick your dates — get a genuine, human-sounding letter. No AI fingerprint, 25 languages, 995-character limit enforced.",
+    "Write a personalized CouchSurfing couch request in seconds. Paste the host's profile, pick your dates — get a human-sounding couch request letter that actually gets replies. No AI clichés, 25 languages, 995-character limit enforced.",
   keywords: [
     "couchsurfing request",
+    "couchsurfing couch request",
+    "couch request",
     "couch request writer",
     "couchsurfing message",
-    "couchsurfing letter generator",
+    "couchsurfing letter",
     "couch request letter",
-    "couchsurfing couch request",
     "how to write couchsurfing request",
+    "couchsurfing request generator",
     "couchsurfing request template",
     "couch surfing request",
-    "couchsurfing request AI",
+    "cs request",
+    "host request couchsurfing",
+    "write couchsurfing message",
   ],
   authors: [{ name: "csreq" }],
   creator: "csreq",
@@ -79,7 +83,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className={`${ibmPlexSerif.variable} ${inter.variable} ${courierPrime.variable} h-full`} suppressHydrationWarning>
+    <html lang="en" className={`${ibmPlexSerif.variable} ${inter.variable} ${courierPrime.variable} h-full`} suppressHydrationWarning>
       <body className="min-h-full antialiased">
         <Script id="theme-init" strategy="beforeInteractive">{`(function(){var t=localStorage.getItem('csreq_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);})();`}</Script>
         <script
