@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
     if (user) email = user.email as string;
   }
 
-  const url = email
-    ? `${baseUrl}?checkout[email]=${encodeURIComponent(email)}`
-    : baseUrl;
+  const url = new URL(baseUrl);
+  url.searchParams.set("checkout[custom][plan_type]", plan);
+  if (email) url.searchParams.set("checkout[email]", email);
 
-  return NextResponse.json({ url });
+  return NextResponse.json({ url: url.toString() });
 }
