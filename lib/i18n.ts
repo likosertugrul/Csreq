@@ -106,6 +106,13 @@ export const translations = {
     infoModalTitle: "Sonraki seyahatinde direkt kullan",
     infoModalBody: "Profilini bir kez kaydet — sonraki her seyahatinde host profilini gir, mektubun saniyeler içinde hazır. Hesap oluşturursan her seferinde tekrar doldurmak zorunda kalmazsın.",
     infoModalBtn: "Kaydol / Giriş Yap",
+    howToBadge: "Nasıl çalışır",
+    howToTitle: "Üç adımda mektup.",
+    howToSteps: [
+      { title: "Profilini bir kez doldur", body: "Adını, nereden geldiğini ve ilgi alanlarını gir. Bu bilgiler her mektupta kullanılır." },
+      { title: "Host profilini yapıştır", body: "Ev sahibinin CouchSurfing profilini (varsa home ve referanslar) yapıştır, tarihlerini ve mektup dilini seç." },
+      { title: "Üret, düzenle, gönder", body: "Saniyeler içinde kişisel, insan gibi yazılmış bir mektup çıkar. Düzenle, kopyala ve CouchSurfing'e yapıştır." },
+    ],
     navLoginBtn: "Giriş Yap",
     deleteAccount: "Hesabı Sil",
     deleteAccountConfirm: "Hesabını ve tüm verilerini kalıcı olarak silmek istiyor musun? Bu işlem geri alınamaz.",
@@ -240,6 +247,13 @@ export const translations = {
     infoModalTitle: "Use it instantly on your next trip",
     infoModalBody: "Save your profile once — next time just enter the host profile and your letter is ready in seconds. Create an account so you never have to fill it in again.",
     infoModalBtn: "Sign up / Sign in",
+    howToBadge: "How it works",
+    howToTitle: "A letter in three steps.",
+    howToSteps: [
+      { title: "Fill in your profile once", body: "Add your name, where you're from, and your interests. These are used in every letter." },
+      { title: "Paste the host's profile", body: "Paste the host's CouchSurfing profile (plus home and references if you have them), then pick your dates and the letter language." },
+      { title: "Generate, edit, send", body: "A personal, human-sounding letter appears in seconds. Edit it, copy it, and paste it into CouchSurfing." },
+    ],
     navLoginBtn: "Sign In",
     deleteAccount: "Delete Account",
     deleteAccountConfirm: "Permanently delete your account and all data? This cannot be undone.",
@@ -374,6 +388,13 @@ export const translations = {
     infoModalTitle: "Sofort auf deiner nächsten Reise nutzen",
     infoModalBody: "Profil einmal speichern — beim nächsten Mal einfach das Gastgeber-Profil eingeben und der Brief ist in Sekunden fertig. Erstelle ein Konto, damit du nie wieder ausfüllen musst.",
     infoModalBtn: "Registrieren / Anmelden",
+    howToBadge: "So funktioniert's",
+    howToTitle: "Ein Brief in drei Schritten.",
+    howToSteps: [
+      { title: "Profil einmal ausfüllen", body: "Gib deinen Namen, deine Herkunft und deine Interessen an. Diese werden in jedem Brief verwendet." },
+      { title: "Gastgeber-Profil einfügen", body: "Füge das CouchSurfing-Profil des Gastgebers ein (plus Home und Referenzen, falls vorhanden), wähle dann deine Daten und die Briefsprache." },
+      { title: "Erstellen, bearbeiten, senden", body: "In Sekunden erscheint ein persönlicher, menschlich klingender Brief. Bearbeite ihn, kopiere ihn und füge ihn in CouchSurfing ein." },
+    ],
     navLoginBtn: "Anmelden",
     deleteAccount: "Konto löschen",
     deleteAccountConfirm: "Dein Konto und alle Daten dauerhaft löschen? Dies kann nicht rückgängig gemacht werden.",
@@ -508,6 +529,13 @@ export const translations = {
     infoModalTitle: "Utilise-le dès ton prochain voyage",
     infoModalBody: "Enregistre ton profil une fois — la prochaine fois, entre juste le profil de l'hôte et ta lettre est prête en secondes. Crée un compte pour ne plus jamais avoir à remplir.",
     infoModalBtn: "S'inscrire / Se connecter",
+    howToBadge: "Comment ça marche",
+    howToTitle: "Une lettre en trois étapes.",
+    howToSteps: [
+      { title: "Remplis ton profil une fois", body: "Ajoute ton nom, ta provenance et tes centres d'intérêt. Ils servent dans chaque lettre." },
+      { title: "Colle le profil de l'hôte", body: "Colle le profil CouchSurfing de l'hôte (plus home et références si tu les as), puis choisis tes dates et la langue de la lettre." },
+      { title: "Génère, modifie, envoie", body: "Une lettre personnelle au ton humain apparaît en secondes. Modifie-la, copie-la et colle-la dans CouchSurfing." },
+    ],
     navLoginBtn: "Connexion",
     deleteAccount: "Supprimer le compte",
     deleteAccountConfirm: "Supprimer définitivement ton compte et toutes les données ? Cette action est irréversible.",
@@ -642,6 +670,13 @@ export const translations = {
     infoModalTitle: "Úsalo en tu próximo viaje",
     infoModalBody: "Guarda tu perfil una vez — la próxima vez solo introduce el perfil del anfitrión y tu carta estará lista en segundos. Crea una cuenta para no tener que rellenarlo nunca más.",
     infoModalBtn: "Registrarse / Iniciar sesión",
+    howToBadge: "Cómo funciona",
+    howToTitle: "Una carta en tres pasos.",
+    howToSteps: [
+      { title: "Rellena tu perfil una vez", body: "Añade tu nombre, de dónde eres y tus intereses. Se usan en cada carta." },
+      { title: "Pega el perfil del anfitrión", body: "Pega el perfil de CouchSurfing del anfitrión (más home y referencias si las tienes), luego elige tus fechas y el idioma de la carta." },
+      { title: "Genera, edita, envía", body: "En segundos aparece una carta personal que suena humana. Edítala, cópiala y pégala en CouchSurfing." },
+    ],
     navLoginBtn: "Iniciar sesión",
     deleteAccount: "Eliminar cuenta",
     deleteAccountConfirm: "¿Eliminar permanentemente tu cuenta y todos los datos? Esta acción no se puede deshacer.",
@@ -776,6 +811,13 @@ export const translations = {
     infoModalTitle: "Usalo subito nel prossimo viaggio",
     infoModalBody: "Salva il tuo profilo una volta — la prossima volta inserisci solo il profilo dell'host e la lettera è pronta in pochi secondi. Crea un account per non dover mai più compilare.",
     infoModalBtn: "Registrati / Accedi",
+    howToBadge: "Come funziona",
+    howToTitle: "Una lettera in tre passi.",
+    howToSteps: [
+      { title: "Compila il profilo una volta", body: "Aggiungi il tuo nome, da dove vieni e i tuoi interessi. Vengono usati in ogni lettera." },
+      { title: "Incolla il profilo dell'host", body: "Incolla il profilo CouchSurfing dell'host (più home e referenze se le hai), poi scegli le date e la lingua della lettera." },
+      { title: "Genera, modifica, invia", body: "In pochi secondi appare una lettera personale dal tono umano. Modificala, copiala e incollala in CouchSurfing." },
+    ],
     navLoginBtn: "Accedi",
     deleteAccount: "Elimina account",
     deleteAccountConfirm: "Eliminare definitivamente il tuo account e tutti i dati? Questa operazione non può essere annullata.",
@@ -910,6 +952,13 @@ export const translations = {
     infoModalTitle: "Usa-o na tua próxima viagem",
     infoModalBody: "Guarda o teu perfil uma vez — da próxima vez, introduz apenas o perfil do anfitrião e a tua carta fica pronta em segundos. Cria uma conta para nunca mais teres de preencher.",
     infoModalBtn: "Registar / Entrar",
+    howToBadge: "Como funciona",
+    howToTitle: "Uma carta em três passos.",
+    howToSteps: [
+      { title: "Preenche o teu perfil uma vez", body: "Adiciona o teu nome, de onde és e os teus interesses. São usados em cada carta." },
+      { title: "Cola o perfil do anfitrião", body: "Cola o perfil de CouchSurfing do anfitrião (mais home e referências se as tiveres), depois escolhe as tuas datas e a língua da carta." },
+      { title: "Gera, edita, envia", body: "Em segundos surge uma carta pessoal com um tom humano. Edita-a, copia-a e cola-a no CouchSurfing." },
+    ],
     navLoginBtn: "Entrar",
     deleteAccount: "Eliminar conta",
     deleteAccountConfirm: "Eliminar permanentemente a tua conta e todos os dados? Esta ação não pode ser revertida.",
@@ -951,5 +1000,9 @@ export const translations = {
   },
 } as const;
 
-type Widen<V> = V extends string ? string : V extends readonly string[] ? readonly string[] : V;
+type Widen<V> =
+  V extends string ? string
+  : V extends readonly (infer E)[] ? readonly Widen<E>[]
+  : V extends object ? { [K in keyof V]: Widen<V[K]> }
+  : V;
 export type T = { [K in keyof typeof translations.TR]: Widen<typeof translations.TR[K]> };

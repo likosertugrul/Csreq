@@ -562,11 +562,40 @@ function PageInner() {
         )}
 
         {letter && (
-          <div style={{ marginTop: "3rem", paddingBottom: "5rem" }}>
+          <div style={{ marginTop: "3rem", paddingBottom: "3rem" }}>
             <div style={{ height: "1px", background: "var(--color-edge)", marginBottom: "2.5rem" }} />
             <LetterOutput t={t} letter={letter} charLimit={charLimit} />
           </div>
         )}
+
+        {/* How to use */}
+        <section style={{ margin: "clamp(3rem,6vw,5rem) 0", paddingBottom: "4rem" }}>
+          <div style={{ height: "1px", background: "var(--color-edge)", marginBottom: "clamp(2rem,5vw,3rem)" }} />
+          <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-amber)", marginBottom: "0.6rem", fontWeight: 500 }}>
+            {t.howToBadge}
+          </p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)", fontWeight: 300, color: "var(--color-ink)", letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "clamp(1.75rem,4vw,2.5rem)" }}>
+            {t.howToTitle}
+          </h2>
+          <div className="r-grid-steps">
+            {t.howToSteps.map((step, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                <div style={{
+                  width: "40px", height: "40px", borderRadius: "10px",
+                  border: "1px solid var(--color-edge)", background: "rgba(255,255,255,0.02)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "var(--color-amber)", fontWeight: 600,
+                }}>{["01", "02", "03"][i]}</div>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", fontWeight: 400, color: "var(--color-ink)", letterSpacing: "-0.01em" }}>
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.7 }}>
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>

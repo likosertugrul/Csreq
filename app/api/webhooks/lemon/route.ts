@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import crypto from "crypto";
 
+const MONTH_MS = 31 * 24 * 60 * 60 * 1000;
+
 function verifySignature(body: string, signature: string, secret: string): boolean {
   const hmac = crypto.createHmac("sha256", secret).update(body).digest("hex");
   return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(signature));
@@ -25,24 +27,33 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const eventName = (payload.meta as Record<string, unknown>)?.event_name as string;
-  if (eventName !== "order_created") {
+  const meta = (payload.meta as Record<string, unknown>) ?? {};
+  const eventName = meta.event_name as string;
+  const customData = (meta.custom_data as Record<string, unknown>) ?? {};
+  const customUserId = customData.user_id as string | undefined;
+  const planType = (customData.plan_type as string) || "monthly"; // 'monthly' | 'lifetime'
+
+  const data = (payload.data as Record<string, unknown>) ?? {};
+  const attrs = (data.attributes as Record<string, unknown>) ?? {};
+  const userEmail = attrs.user_email as string | undefined;
+  const orderId = (data.id as string) ?? String(Date.now());
+  const totalCents = Number(attrs.total ?? 0);
+  // On a subscription-invoice: "initial" | "renewal" | "updated".
+  const billingReason = attrs.billing_reason as string | undefined;
+
+  // Events we act on. Anything else (subscription_created, _updated, _cancelled,
+  // refunds, ...) is acknowledged so Lemon Squeezy stops retrying.
+  const HANDLED = new Set([
+    "order_created",              // one-time (lifetime) or first subscription charge
+    "subscription_payment_success", // recurring monthly renewal
+    "subscription_expired",       // subscription lapsed → downgrade
+  ]);
+  if (!HANDLED.has(eventName)) {
     return NextResponse.json({ ok: true });
   }
 
-  const meta = payload.meta as Record<string, unknown>;
-  const customData = (meta?.custom_data as Record<string, unknown>) ?? {};
-  const planType = customData.plan_type as string; // 'monthly' | 'lifetime'
-  const customUserId = customData.user_id as string | undefined;
-
-  const data = payload.data as Record<string, unknown>;
-  const attrs = data?.attributes as Record<string, unknown>;
-  const userEmail = attrs?.user_email as string;
-  const orderId = (data?.id as string) ?? String(Date.now());
-  const totalCents = Number(attrs?.total ?? 0);
-
-  if (!planType || (!customUserId && !userEmail)) {
-    return NextResponse.json({ error: "Missing plan_type or user identity" }, { status: 400 });
+  if (!customUserId && !userEmail) {
+    return NextResponse.json({ error: "Missing user identity" }, { status: 400 });
   }
 
   const db = await getDb();
@@ -50,16 +61,16 @@ export async function POST(req: NextRequest) {
   // email typed into the Lemon Squeezy checkout, which may differ.
   let user = customUserId
     ? (await db.execute({
-        sql: "SELECT id FROM users WHERE id = ?",
+        sql: "SELECT id, plan_expires_at FROM users WHERE id = ?",
         args: [customUserId],
-      })).rows[0] as unknown as { id: string } | undefined
+      })).rows[0] as unknown as { id: string; plan_expires_at: number | null } | undefined
     : undefined;
 
   if (!user && userEmail) {
     user = (await db.execute({
-      sql: "SELECT id FROM users WHERE email = ?",
+      sql: "SELECT id, plan_expires_at FROM users WHERE email = ?",
       args: [userEmail],
-    })).rows[0] as unknown as { id: string } | undefined;
+    })).rows[0] as unknown as { id: string; plan_expires_at: number | null } | undefined;
   }
 
   if (!user) {
@@ -67,7 +78,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const planExpiresAt = planType === "monthly" ? Date.now() + 31 * 24 * 60 * 60 * 1000 : null;
+  if (eventName === "subscription_expired") {
+    await db.execute({
+      sql: "UPDATE users SET plan = 'free', plan_expires_at = NULL WHERE id = ?",
+      args: [user.id],
+    });
+    return NextResponse.json({ ok: true });
+  }
+
+  // The first monthly charge fires BOTH order_created and
+  // subscription_payment_success (billing_reason "initial"). order_created owns
+  // the initial grant; the initial payment_success is a no-op so the term isn't
+  // counted twice. Only genuine renewals extend it.
+  if (eventName === "subscription_payment_success" && billingReason === "initial") {
+    return NextResponse.json({ ok: true });
+  }
+
+  // Grant (order_created) or extend (renewal) pro. Lifetime never expires.
+  // Monthly's initial grant is a fixed 31-day term; a renewal adds 31 days from
+  // whichever is later — now or the current expiry — so an early charge doesn't
+  // shorten the term.
+  let planExpiresAt: number | null;
+  if (planType === "lifetime") {
+    planExpiresAt = null;
+  } else if (eventName === "order_created") {
+    planExpiresAt = Date.now() + MONTH_MS;
+  } else {
+    const base = Math.max(Date.now(), user.plan_expires_at ?? 0);
+    planExpiresAt = base + MONTH_MS;
+  }
 
   await db.execute({
     sql: "UPDATE users SET plan = 'pro', plan_expires_at = ? WHERE id = ?",
