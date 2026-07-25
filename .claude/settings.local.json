@@ -16,7 +16,14 @@
       "Bash(pkill -f \"next dev\")",
       "Bash(python3 -m json.tool)",
       "Bash(sort -t_ -k1)",
-      "Bash(tee /tmp/csreq-dev.log)"
+      "Bash(tee /tmp/csreq-dev.log)",
+      "Bash(dig +short csreq.likosertugrul.com)",
+      "Skill(claude-api)",
+      "Bash(npx wrangler *)",
+      "Bash(export CLOUDFLARE_ACCOUNT_ID=21f6698288c744e3b308b3904f6c499c)",
+      "Bash(rm *)",
+      "WebSearch",
+      "Bash(echo \"=== EXIT: $? ===\")"
     ]
   }
 }

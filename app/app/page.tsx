@@ -33,7 +33,7 @@ function PageInner() {
 
   const [authUser, setAuthUser] = useState<AuthUser | null | undefined>(undefined);
   const [showSetup, setShowSetup] = useState(false);
-  const [appLang, setAppLang] = useState<Lang>("TR");
+  const [appLang, setAppLang] = useState<Lang>("EN");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [hostText, setHostText] = useState("");
   const [hostHomeText, setHostHomeText] = useState("");

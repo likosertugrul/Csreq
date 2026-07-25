@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
   const meta = payload.meta as Record<string, unknown>;
   const customData = (meta?.custom_data as Record<string, unknown>) ?? {};
   const planType = customData.plan_type as string; // 'monthly' | 'lifetime'
+  const customUserId = customData.user_id as string | undefined;
 
   const data = payload.data as Record<string, unknown>;
   const attrs = data?.attributes as Record<string, unknown>;
@@ -40,18 +41,29 @@ export async function POST(req: NextRequest) {
   const orderId = (data?.id as string) ?? String(Date.now());
   const totalCents = Number(attrs?.total ?? 0);
 
-  if (!planType || !userEmail) {
-    return NextResponse.json({ error: "Missing plan_type or user_email" }, { status: 400 });
+  if (!planType || (!customUserId && !userEmail)) {
+    return NextResponse.json({ error: "Missing plan_type or user identity" }, { status: 400 });
   }
 
   const db = await getDb();
-  const user = (await db.execute({
-    sql: "SELECT id FROM users WHERE email = ?",
-    args: [userEmail],
-  })).rows[0] as unknown as { id: string } | undefined;
+  // Prefer the logged-in user's id (captured at checkout); fall back to the
+  // email typed into the Lemon Squeezy checkout, which may differ.
+  let user = customUserId
+    ? (await db.execute({
+        sql: "SELECT id FROM users WHERE id = ?",
+        args: [customUserId],
+      })).rows[0] as unknown as { id: string } | undefined
+    : undefined;
+
+  if (!user && userEmail) {
+    user = (await db.execute({
+      sql: "SELECT id FROM users WHERE email = ?",
+      args: [userEmail],
+    })).rows[0] as unknown as { id: string } | undefined;
+  }
 
   if (!user) {
-    console.warn("[lemon webhook] No user found for email:", userEmail);
+    console.warn("[lemon webhook] No user found for", customUserId ?? userEmail);
     return NextResponse.json({ ok: true });
   }
 

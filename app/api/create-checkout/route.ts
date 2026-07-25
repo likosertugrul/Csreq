@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
 
   const url = new URL(baseUrl);
   url.searchParams.set("checkout[custom][plan_type]", plan);
+  if (userId) url.searchParams.set("checkout[custom][user_id]", userId);
   if (email) url.searchParams.set("checkout[email]", email);
 
   return NextResponse.json({ url: url.toString() });
