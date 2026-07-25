@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Logo from "@/components/Logo";
-
-type LandingLang = "TR" | "EN";
+import { LANGS, type Lang } from "@/lib/i18n";
 
 const LT = {
   EN: {
@@ -89,6 +88,211 @@ const LT = {
     pricMonthly: { label: "Aylık", price: "$5", per: "/ay", note: "İstediğin zaman iptal et", features: ["Sınırsız mektup","Tüm diller","Tam editör","Ev sahibi uyarıları","Öncelikli destek"], cta: "Ücretsiz başla, sonra yükselt" },
     pricLifetime: { label: "Ömür Boyu", price: "$25", note: "Tek ödeme, sonsuza dek", features: ["Sınırsız mektup","Tüm diller","Tam editör","Ev sahibi uyarıları","Öncelikli destek","Gelecekteki tüm özellikler"], cta: "Ömür boyu erişim al →", badge: "En iyi değer" },
     footerText: "© 2025 csreq. Daha iyi couch request mektupları yaz.",
+  },
+  DE: {
+    tryFree: "Kostenlos testen →",
+    dark: "Dunkel", light: "Hell",
+    heroBadge: "Couch Request",
+    heroTitle: <>Schreibe die perfekte<br />CouchSurfing-Anfrage.<br /></>,
+    heroItalic: "In Sekunden.",
+    heroSub: "Füge das CouchSurfing-Profil des Gastgebers ein. Wähle deine Daten. Erhalte eine echte Couch-Anfrage, die auf Dinge eingeht, die dem Gastgeber wirklich wichtig sind — kein KI-Fülltext.",
+    heroFreeNote: "5 Briefe gratis · keine Kreditkarte",
+    exBadge: "In Aktion sehen",
+    exTitle: "CouchSurfing-Anfragen, die Antworten bekommen.",
+    exSub: "Klicke auf eine Karte, um die vollständige Couch-Anfrage zu lesen.",
+    exModalBadge: "Beispielbrief",
+    exCopy: "Kopieren", exCopied: "✓ Kopiert",
+    howBadge: "So funktioniert's",
+    howTitle: "Drei Schritte zu einer besseren Anfrage.",
+    howSteps: [
+      { title: "Füge das CouchSurfing-Profil ein", body: "Kopiere den Text von der CouchSurfing-Seite — oder füge einfach die URL ein. Funktioniert mit Profil, Home-Bereich und Referenzen." },
+      { title: "Wähle deine Daten", body: "Lege Ankunft und Abreise fest. Die Anfrage erwähnt automatisch, wie lange du bleibst." },
+      { title: "Kopieren und Anfrage senden", body: "In Sekunden erscheint ein persönlicher, menschlich klingender Brief. Bearbeite ihn frei, kopiere ihn und füge ihn in CouchSurfing ein." },
+    ],
+    vsBadge: "statt chatgpt deine anfrage schreiben zu lassen",
+    vsTitle: <>ChatGPT schreibt eine Anfrage.<br /></>,
+    vsItalic: "Diese hier bekommt vielleicht eine Antwort.",
+    vsSub: "Du kannst ChatGPT bitten, eine CouchSurfing-Anfrage zu schreiben. Was zurückkommt, ist grammatikalisch korrekt, politisch unbedenklich und völlig vergesslich. Gastgeber lesen Hunderte von Anfragen — sie erkennen KI-Text sofort. Wir haben csreq genau für dieses Problem gebaut.",
+    vsProblem: "Das Problem",
+    vsCards: [
+      { title: "LLMs haben einen Schreib-Fingerabdruck", body: "Jedes LLM greift zu denselben Formulierungen. Gastgeber, die hundert Anfragen im Monat lesen, erkennen sie sofort. Ein Brief, der wie KI klingt, wird archiviert.", listTitle: "in csreq blockiert", list: ["„lebendige lokale Kultur“","„ein Teppich aus Erfahrungen“","„es wäre mir eine Ehre“","nicht nur … sondern auch …","übermäßige Gedankenstriche —","„nahtlos“ / „entscheidend“ / „fördern“"] },
+      { title: "ChatGPT kennt die Regeln von CouchSurfing nicht", body: "CouchSurfing schneidet Anfragen bei 995 Zeichen ab. Ein reines LLM schreibt fröhlich 400 Wörter, die stillschweigend abgeschnitten werden, bevor der Gastgeber deinen Namen sieht.", badLabel: "ChatGPT-Ausgabe", badText: "1.340 Zeichen — der Gastgeber sieht die ersten 995, der Brief endet mitten im Satz", goodLabel: "csreq-Ausgabe", goodText: "874 Zeichen — endet mit einem echten Satz, nichts wird abgeschnitten" },
+      { title: "Allgemein schlägt spezifisch jedes Mal — in die falsche Richtung", body1: "Wenn du ChatGPT bittest, eine Anfrage zu schreiben, schreibt es über „von Einheimischen lernen“ und „authentische Kultur erkunden“. Das ist die Standardeinstellung. Es weiß nicht, dass der Gastgeber zwei Jahre lang einen Dachgarten angelegt hat oder nur Leute beherbergt, die kochen.", body2: "csreq liest den echten Profiltext und zieht die Details heraus, die zählen — ein bestimmtes Hobby, eine ungewöhnliche Wohnsituation, etwas, das der Gastgeber geschrieben hat und das die meisten Reisenden überspringen. Der entstehende Brief ist einer, dem der Gastgeber ansieht, dass er für ihn geschrieben wurde." },
+      { title: "LLMs lesen das Kleingedruckte nicht", body: "Gastgeber verstecken wichtige Bedingungen oft in ihrem Profil — nur weibliche Gäste, mindestens drei Nächte, keine Gäste in bestimmten Monaten, FKK-Haushalt. ChatGPT schreibt trotzdem einen fröhlichen Brief.", warnings: ["Nur weibliche Gäste","Mindestens 3 Nächte","Keine Gäste bis März"], warnSuffix: "— aus dem Profil erkannt", warnNote: "csreq markiert diese Bedingungen, bevor du schreibst. Du schickst keinen perfekten Brief an den falschen Gastgeber." },
+    ],
+    featBadge: "Warum anders",
+    featTitle: <>Für CouchSurfing gebaut,<br /></>,
+    featItalic: "nicht für generische Vorlagen.",
+    pricBadge: "Preise",
+    pricTitle: "Einfach und fair.",
+    pricFree: { label: "Kostenlos", price: "$0", note: "Keine Kreditkarte nötig", features: ["5 Briefe insgesamt","Alle Sprachen","Voller Editor","Gastgeber-Warnungen"], cta: "Loslegen" },
+    pricMonthly: { label: "Monatlich", price: "$5", per: "/Monat", note: "Jederzeit kündbar", features: ["Unbegrenzte Briefe","Alle Sprachen","Voller Editor","Gastgeber-Warnungen","Priorisierter Support"], cta: "Kostenlos starten, später upgraden" },
+    pricLifetime: { label: "Lebenslang", price: "$25", note: "Einmalzahlung, für immer", features: ["Unbegrenzte Briefe","Alle Sprachen","Voller Editor","Gastgeber-Warnungen","Priorisierter Support","Alle zukünftigen Funktionen"], cta: "Lebenslangen Zugang holen →", badge: "Bester Wert" },
+    footerText: "© 2025 csreq. Schreibe bessere CouchSurfing-Anfragen.",
+  },
+  FR: {
+    tryFree: "Essayer gratuitement →",
+    dark: "Sombre", light: "Clair",
+    heroBadge: "Couch Request",
+    heroTitle: <>Rédige la demande CouchSurfing<br />parfaite.<br /></>,
+    heroItalic: "En quelques secondes.",
+    heroSub: "Colle le profil CouchSurfing de l'hôte. Choisis tes dates. Obtiens une vraie demande de canapé qui évoque ce qui compte vraiment pour l'hôte — pas du remplissage d'IA.",
+    heroFreeNote: "5 lettres gratuites · sans carte bancaire",
+    exBadge: "Voir en action",
+    exTitle: "Des demandes CouchSurfing qui reçoivent des réponses.",
+    exSub: "Clique sur une carte pour lire la demande complète.",
+    exModalBadge: "Exemple de lettre",
+    exCopy: "Copier", exCopied: "✓ Copié",
+    howBadge: "Comment ça marche",
+    howTitle: "Trois étapes pour une meilleure demande.",
+    howSteps: [
+      { title: "Colle le profil CouchSurfing de l'hôte", body: "Copie le texte de sa page CouchSurfing — ou colle simplement l'URL. Fonctionne avec le profil, la section home et les références." },
+      { title: "Choisis tes dates", body: "Indique ton arrivée et ton départ. La lettre mentionne automatiquement la durée de ton séjour." },
+      { title: "Copie et envoie ta demande", body: "Une lettre personnalisée, au ton humain, apparaît en quelques secondes. Modifie-la librement, puis copie-la dans CouchSurfing." },
+    ],
+    vsBadge: "plutôt que de demander à chatgpt d'écrire ta demande",
+    vsTitle: <>ChatGPT écrit une demande.<br /></>,
+    vsItalic: "Celle-ci pourrait recevoir une réponse.",
+    vsSub: "Tu peux demander à ChatGPT d'écrire une demande CouchSurfing. Ce qui revient est grammaticalement correct, politiquement inoffensif et totalement oubliable. Les hôtes lisent des centaines de demandes — ils reconnaissent l'écriture d'IA immédiatement. Nous avons conçu csreq précisément pour résoudre ce problème.",
+    vsProblem: "Le problème",
+    vsCards: [
+      { title: "Les LLM ont une empreinte d'écriture", body: "Chaque LLM recourt aux mêmes formules. Les hôtes qui lisent cent demandes par mois les reconnaissent aussitôt. Une lettre qui sonne comme de l'IA est une lettre qui finit archivée.", listTitle: "bloqué dans csreq", list: ["« culture locale vibrante »","« une tapisserie d'expériences »","« ce serait un honneur »","non seulement … mais aussi …","abus de tirets cadratins —","« fluide » / « crucial » / « favoriser »"] },
+      { title: "ChatGPT ne connaît pas les règles de CouchSurfing", body: "CouchSurfing coupe les messages de demande à 995 caractères. Un LLM brut écrira volontiers 400 mots qui seront silencieusement tronqués avant même que l'hôte voie ton nom.", badLabel: "Sortie ChatGPT", badText: "1 340 caractères — l'hôte voit les 995 premiers, la lettre s'arrête en plein milieu", goodLabel: "Sortie csreq", goodText: "874 caractères — se termine sur une vraie phrase, rien n'est coupé" },
+      { title: "Le générique l'emporte toujours sur le spécifique — dans le mauvais sens", body1: "Quand tu demandes à ChatGPT d'écrire une demande, il parle d'« apprendre des locaux » et d'« explorer la culture authentique ». C'est le réglage par défaut. Il ne sait pas que l'hôte a passé deux ans à construire un jardin sur le toit ou qu'il n'accueille que des gens qui cuisinent.", body2: "csreq lit le vrai texte du profil et en extrait les détails qui comptent — un loisir précis, une situation de vie inhabituelle, une chose que l'hôte a écrite et que la plupart des voyageurs ignorent. La lettre obtenue est une lettre dont l'hôte voit qu'elle a été écrite pour lui." },
+      { title: "Les LLM ne lisent pas les petits caractères", body: "Les hôtes enfouissent souvent des conditions importantes dans leur profil — femmes uniquement, minimum trois nuits, pas d'invités certains mois, foyer naturiste. ChatGPT écrit une lettre enjouée malgré tout.", warnings: ["Femmes uniquement","Séjour de 3 nuits minimum","Pas d'invités avant mars"], warnSuffix: "— détecté depuis le profil", warnNote: "csreq signale ces conditions avant que tu écrives. Tu n'enverras pas une lettre parfaite au mauvais hôte." },
+    ],
+    featBadge: "Pourquoi c'est différent",
+    featTitle: <>Conçu pour CouchSurfing,<br /></>,
+    featItalic: "pas des modèles génériques.",
+    pricBadge: "Tarifs",
+    pricTitle: "Simple et juste.",
+    pricFree: { label: "Gratuit", price: "$0", note: "Sans carte bancaire", features: ["5 lettres au total","Toutes les langues","Éditeur complet","Alertes sur l'hôte"], cta: "Commencer" },
+    pricMonthly: { label: "Mensuel", price: "$5", per: "/mois", note: "Annulable à tout moment", features: ["Lettres illimitées","Toutes les langues","Éditeur complet","Alertes sur l'hôte","Support prioritaire"], cta: "Commence gratuitement, upgrade plus tard" },
+    pricLifetime: { label: "À vie", price: "$25", note: "Un paiement, pour toujours", features: ["Lettres illimitées","Toutes les langues","Éditeur complet","Alertes sur l'hôte","Support prioritaire","Toutes les fonctions futures"], cta: "Obtenir l'accès à vie →", badge: "Meilleure valeur" },
+    footerText: "© 2025 csreq. Rédige de meilleures demandes CouchSurfing.",
+  },
+  ES: {
+    tryFree: "Probar gratis →",
+    dark: "Oscuro", light: "Claro",
+    heroBadge: "Couch Request",
+    heroTitle: <>Escribe la solicitud de CouchSurfing<br />perfecta.<br /></>,
+    heroItalic: "En segundos.",
+    heroSub: "Pega el perfil de CouchSurfing del anfitrión. Elige tus fechas. Consigue una solicitud de sofá genuina que menciona lo que de verdad le importa al anfitrión — nada de relleno de IA.",
+    heroFreeNote: "5 cartas gratis · sin tarjeta",
+    exBadge: "Verlo en acción",
+    exTitle: "Solicitudes de CouchSurfing que reciben respuesta.",
+    exSub: "Haz clic en una tarjeta para leer la solicitud completa.",
+    exModalBadge: "Carta de ejemplo",
+    exCopy: "Copiar", exCopied: "✓ Copiado",
+    howBadge: "Cómo funciona",
+    howTitle: "Tres pasos hacia una mejor solicitud.",
+    howSteps: [
+      { title: "Pega el perfil de CouchSurfing del anfitrión", body: "Copia el texto de su página de CouchSurfing — o pega la URL. Funciona con el perfil, la sección home y las referencias." },
+      { title: "Elige tus fechas", body: "Indica tu llegada y salida. La carta menciona automáticamente cuánto tiempo te quedas." },
+      { title: "Copia y envía tu solicitud", body: "En segundos aparece una carta personalizada que suena humana. Edítala a tu gusto, luego cópiala y pégala en CouchSurfing." },
+    ],
+    vsBadge: "en vez de pedirle a chatgpt que escriba tu solicitud",
+    vsTitle: <>ChatGPT escribe una solicitud.<br /></>,
+    vsItalic: "Esta podría recibir respuesta.",
+    vsSub: "Puedes pedirle a ChatGPT que escriba una solicitud de CouchSurfing. Lo que recibes es gramaticalmente correcto, políticamente inofensivo y completamente olvidable. Los anfitriones leen cientos de solicitudes — reconocen la escritura de IA de inmediato. Creamos csreq precisamente para resolver ese problema.",
+    vsProblem: "El problema",
+    vsCards: [
+      { title: "Los LLM tienen una huella de escritura", body: "Cada LLM recurre a las mismas frases. Los anfitriones que leen cien solicitudes al mes las reconocen al instante. Una carta que suena a IA es una carta que acaba archivada.", listTitle: "bloqueado en csreq", list: ["«cultura local vibrante»","«un tapiz de experiencias»","«sería un honor»","no solo … sino también …","abuso de rayas —","«fluido» / «crucial» / «fomentar»"] },
+      { title: "ChatGPT no conoce las reglas de CouchSurfing", body: "CouchSurfing corta los mensajes de solicitud a los 995 caracteres. Un LLM sin más escribirá alegremente 400 palabras que se recortan en silencio antes de que el anfitrión vea tu nombre.", badLabel: "Salida de ChatGPT", badText: "1.340 caracteres — el anfitrión ve los primeros 995, la carta termina a media frase", goodLabel: "Salida de csreq", goodText: "874 caracteres — termina en una frase real, no se corta nada" },
+      { title: "Lo genérico siempre gana a lo específico — en la dirección equivocada", body1: "Cuando le pides a ChatGPT que escriba una solicitud, escribe sobre «aprender de los locales» y «explorar la cultura auténtica». Eso es lo predeterminado. No sabe que el anfitrión pasó dos años construyendo un jardín en la azotea ni que solo aloja a gente que cocina.", body2: "csreq lee el texto real del perfil y extrae los detalles que importan — una afición concreta, una situación de vivienda inusual, algo que el anfitrión escribió y que la mayoría de los viajeros pasa por alto. La carta resultante es una que el anfitrión nota que fue escrita para él." },
+      { title: "Los LLM no leen la letra pequeña", body: "Los anfitriones suelen esconder condiciones importantes en su perfil — solo mujeres, mínimo tres noches, sin huéspedes ciertos meses, hogar nudista. ChatGPT escribe una carta alegre de todos modos.", warnings: ["Solo huéspedes mujeres","Estancia mínima de 3 noches","Sin huéspedes hasta marzo"], warnSuffix: "— detectado en el perfil", warnNote: "csreq marca estas condiciones antes de que escribas. No enviarás una carta perfecta al anfitrión equivocado." },
+    ],
+    featBadge: "Por qué es diferente",
+    featTitle: <>Hecho para CouchSurfing,<br /></>,
+    featItalic: "no plantillas genéricas.",
+    pricBadge: "Precios",
+    pricTitle: "Simple y justo.",
+    pricFree: { label: "Gratis", price: "$0", note: "Sin tarjeta de crédito", features: ["5 cartas en total","Todos los idiomas","Editor completo","Avisos del anfitrión"], cta: "Empezar" },
+    pricMonthly: { label: "Mensual", price: "$5", per: "/mes", note: "Cancela cuando quieras", features: ["Cartas ilimitadas","Todos los idiomas","Editor completo","Avisos del anfitrión","Soporte prioritario"], cta: "Empieza gratis, mejora después" },
+    pricLifetime: { label: "De por vida", price: "$25", note: "Un pago, para siempre", features: ["Cartas ilimitadas","Todos los idiomas","Editor completo","Avisos del anfitrión","Soporte prioritario","Todas las funciones futuras"], cta: "Consigue acceso de por vida →", badge: "Mejor valor" },
+    footerText: "© 2025 csreq. Escribe mejores solicitudes de CouchSurfing.",
+  },
+  IT: {
+    tryFree: "Prova gratis →",
+    dark: "Scuro", light: "Chiaro",
+    heroBadge: "Couch Request",
+    heroTitle: <>Scrivi la richiesta CouchSurfing<br />perfetta.<br /></>,
+    heroItalic: "In pochi secondi.",
+    heroSub: "Incolla il profilo CouchSurfing dell'host. Scegli le date. Ottieni una richiesta autentica che parla di ciò che all'host interessa davvero — niente riempitivo da IA.",
+    heroFreeNote: "5 lettere gratis · nessuna carta",
+    exBadge: "Guarda in azione",
+    exTitle: "Richieste CouchSurfing che ricevono risposta.",
+    exSub: "Clicca su una scheda per leggere la richiesta completa.",
+    exModalBadge: "Lettera di esempio",
+    exCopy: "Copia", exCopied: "✓ Copiato",
+    howBadge: "Come funziona",
+    howTitle: "Tre passi verso una richiesta migliore.",
+    howSteps: [
+      { title: "Incolla il profilo CouchSurfing dell'host", body: "Copia il testo dalla sua pagina CouchSurfing — o incolla semplicemente l'URL. Funziona con profilo, sezione home e referenze." },
+      { title: "Scegli le date", body: "Imposta arrivo e partenza. La lettera indica automaticamente quanto ti fermi." },
+      { title: "Copia e invia la richiesta", body: "In pochi secondi appare una lettera personalizzata dal tono umano. Modificala liberamente, poi copiala e incollala in CouchSurfing." },
+    ],
+    vsBadge: "invece di chiedere a chatgpt di scrivere la tua richiesta",
+    vsTitle: <>ChatGPT scrive una richiesta.<br /></>,
+    vsItalic: "Questa potrebbe ricevere risposta.",
+    vsSub: "Puoi chiedere a ChatGPT di scrivere una richiesta CouchSurfing. Quello che torna è grammaticalmente corretto, politicamente innocuo e del tutto dimenticabile. Gli host leggono centinaia di richieste — riconoscono la scrittura dell'IA all'istante. Abbiamo creato csreq proprio per risolvere questo problema.",
+    vsProblem: "Il problema",
+    vsCards: [
+      { title: "Gli LLM hanno un'impronta di scrittura", body: "Ogni LLM ricorre alle stesse frasi. Gli host che leggono cento richieste al mese le riconoscono subito. Una lettera che suona come IA è una lettera che finisce in archivio.", listTitle: "bloccato in csreq", list: ["«vivace cultura locale»","«un arazzo di esperienze»","«sarebbe un onore»","non solo … ma anche …","abuso di lineette —","«fluido» / «cruciale» / «promuovere»"] },
+      { title: "ChatGPT non conosce le regole di CouchSurfing", body: "CouchSurfing taglia i messaggi di richiesta a 995 caratteri. Un LLM grezzo scriverà allegramente 400 parole che vengono troncate in silenzio prima ancora che l'host veda il tuo nome.", badLabel: "Output di ChatGPT", badText: "1.340 caratteri — l'host vede i primi 995, la lettera si interrompe a metà frase", goodLabel: "Output di csreq", goodText: "874 caratteri — finisce con una frase vera, non viene tagliato nulla" },
+      { title: "Il generico batte lo specifico ogni volta — nella direzione sbagliata", body1: "Quando chiedi a ChatGPT di scrivere una richiesta, parla di «imparare dalla gente del posto» ed «esplorare la cultura autentica». È l'impostazione predefinita. Non sa che l'host ha passato due anni a costruire un giardino sul tetto o che ospita solo chi cucina.", body2: "csreq legge il testo reale del profilo ed estrae i dettagli che contano — un hobby preciso, una situazione abitativa insolita, qualcosa che l'host ha scritto e che la maggior parte dei viaggiatori salta. La lettera che ne esce è una in cui l'host capisce che è stata scritta per lui." },
+      { title: "Gli LLM non leggono le note in fondo", body: "Gli host spesso nascondono condizioni importanti nel profilo — solo ospiti donne, minimo tre notti, niente ospiti in certi mesi, casa naturista. ChatGPT scrive comunque una lettera allegra.", warnings: ["Solo ospiti donne","Soggiorno minimo di 3 notti","Niente ospiti fino a marzo"], warnSuffix: "— rilevato dal profilo", warnNote: "csreq segnala queste condizioni prima che tu scriva. Non manderai una lettera perfetta all'host sbagliato." },
+    ],
+    featBadge: "Perché è diverso",
+    featTitle: <>Creato per CouchSurfing,<br /></>,
+    featItalic: "non modelli generici.",
+    pricBadge: "Prezzi",
+    pricTitle: "Semplice e giusto.",
+    pricFree: { label: "Gratis", price: "$0", note: "Nessuna carta richiesta", features: ["5 lettere in totale","Tutte le lingue","Editor completo","Avvisi sull'host"], cta: "Inizia" },
+    pricMonthly: { label: "Mensile", price: "$5", per: "/mese", note: "Disdici quando vuoi", features: ["Lettere illimitate","Tutte le lingue","Editor completo","Avvisi sull'host","Supporto prioritario"], cta: "Inizia gratis, passa a pro dopo" },
+    pricLifetime: { label: "A vita", price: "$25", note: "Un pagamento, per sempre", features: ["Lettere illimitate","Tutte le lingue","Editor completo","Avvisi sull'host","Supporto prioritario","Tutte le funzioni future"], cta: "Ottieni l'accesso a vita →", badge: "Miglior valore" },
+    footerText: "© 2025 csreq. Scrivi richieste CouchSurfing migliori.",
+  },
+  PT: {
+    tryFree: "Testar grátis →",
+    dark: "Escuro", light: "Claro",
+    heroBadge: "Couch Request",
+    heroTitle: <>Escreve o pedido de CouchSurfing<br />perfeito.<br /></>,
+    heroItalic: "Em segundos.",
+    heroSub: "Cola o perfil de CouchSurfing do anfitrião. Escolhe as tuas datas. Recebe um pedido genuíno que fala do que realmente importa ao anfitrião — nada de enchimento de IA.",
+    heroFreeNote: "5 cartas grátis · sem cartão",
+    exBadge: "Ver em ação",
+    exTitle: "Pedidos de CouchSurfing que recebem resposta.",
+    exSub: "Clica num cartão para ler o pedido completo.",
+    exModalBadge: "Carta de exemplo",
+    exCopy: "Copiar", exCopied: "✓ Copiado",
+    howBadge: "Como funciona",
+    howTitle: "Três passos para um pedido melhor.",
+    howSteps: [
+      { title: "Cola o perfil de CouchSurfing do anfitrião", body: "Copia o texto da página de CouchSurfing dele — ou cola apenas o URL. Funciona com o perfil, a secção home e as referências." },
+      { title: "Escolhe as tuas datas", body: "Define a chegada e a partida. A carta menciona automaticamente quanto tempo ficas." },
+      { title: "Copia e envia o teu pedido", body: "Em segundos surge uma carta personalizada com um tom humano. Edita-a à vontade, depois copia e cola no CouchSurfing." },
+    ],
+    vsBadge: "em vez de pedir ao chatgpt para escrever o teu pedido",
+    vsTitle: <>O ChatGPT escreve um pedido.<br /></>,
+    vsItalic: "Este pode receber resposta.",
+    vsSub: "Podes pedir ao ChatGPT para escrever um pedido de CouchSurfing. O que volta é gramaticalmente correto, politicamente inofensivo e completamente esquecível. Os anfitriões leem centenas de pedidos — reconhecem a escrita de IA de imediato. Criámos o csreq exatamente para resolver esse problema.",
+    vsProblem: "O problema",
+    vsCards: [
+      { title: "Os LLM têm uma impressão digital de escrita", body: "Cada LLM recorre às mesmas expressões. Anfitriões que leem cem pedidos por mês reconhecem-nas de imediato. Uma carta que soa a IA é uma carta que vai para o arquivo.", listTitle: "bloqueado no csreq", list: ["«cultura local vibrante»","«uma tapeçaria de experiências»","«seria uma honra»","não só … mas também …","abuso de travessões —","«fluido» / «crucial» / «fomentar»"] },
+      { title: "O ChatGPT não conhece as regras do CouchSurfing", body: "O CouchSurfing corta as mensagens de pedido nos 995 caracteres. Um LLM em bruto escreve alegremente 400 palavras que são cortadas em silêncio antes de o anfitrião ver o teu nome.", badLabel: "Resultado do ChatGPT", badText: "1.340 caracteres — o anfitrião vê os primeiros 995, a carta acaba a meio da frase", goodLabel: "Resultado do csreq", goodText: "874 caracteres — acaba numa frase real, nada é cortado" },
+      { title: "O genérico vence o específico sempre — na direção errada", body1: "Quando pedes ao ChatGPT para escrever um pedido, ele fala de «aprender com os locais» e «explorar a cultura autêntica». É a predefinição. Não sabe que o anfitrião passou dois anos a construir um jardim no telhado ou que só recebe quem cozinha.", body2: "O csreq lê o texto real do perfil e extrai os detalhes que importam — um passatempo específico, uma situação de habitação invulgar, algo que o anfitrião escreveu e que a maioria dos viajantes ignora. A carta que resulta é uma em que o anfitrião percebe que foi escrita para ele." },
+      { title: "Os LLM não leem as letras miudinhas", body: "Os anfitriões costumam esconder condições importantes no perfil — só hóspedes mulheres, mínimo de três noites, sem hóspedes em certos meses, casa naturista. O ChatGPT escreve na mesma uma carta animada.", warnings: ["Só hóspedes mulheres","Estadia mínima de 3 noites","Sem hóspedes até março"], warnSuffix: "— detetado no perfil", warnNote: "O csreq assinala estas condições antes de escreveres. Não vais enviar uma carta perfeita ao anfitrião errado." },
+    ],
+    featBadge: "Porquê diferente",
+    featTitle: <>Feito para o CouchSurfing,<br /></>,
+    featItalic: "não modelos genéricos.",
+    pricBadge: "Preços",
+    pricTitle: "Simples e justo.",
+    pricFree: { label: "Grátis", price: "$0", note: "Sem cartão de crédito", features: ["5 cartas no total","Todas as línguas","Editor completo","Avisos do anfitrião"], cta: "Começar" },
+    pricMonthly: { label: "Mensal", price: "$5", per: "/mês", note: "Cancela quando quiseres", features: ["Cartas ilimitadas","Todas as línguas","Editor completo","Avisos do anfitrião","Suporte prioritário"], cta: "Começa grátis, faz upgrade depois" },
+    pricLifetime: { label: "Vitalício", price: "$25", note: "Um pagamento, para sempre", features: ["Cartas ilimitadas","Todas as línguas","Editor completo","Avisos do anfitrião","Suporte prioritário","Todas as funções futuras"], cta: "Obter acesso vitalício →", badge: "Melhor valor" },
+    footerText: "© 2025 csreq. Escreve melhores pedidos de CouchSurfing.",
   },
 } as const;
 
@@ -245,7 +449,7 @@ function LetterModal({ letter, host, onClose, copyLabel, copiedLabel, badge }: {
 export default function LandingPage() {
   const [openLetter, setOpenLetter] = useState<number | null>(null);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [lang, setLang] = useState<LandingLang>("EN");
+  const [lang, setLang] = useState<Lang>("EN");
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -254,8 +458,8 @@ export default function LandingPage() {
       setTheme(savedTheme);
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
-    const savedLang = localStorage.getItem("csreq_app_lang") as LandingLang | null;
-    if (savedLang === "TR" || savedLang === "EN") setLang(savedLang);
+    const savedLang = localStorage.getItem("csreq_app_lang") as Lang | null;
+    if (savedLang && LANGS.some(l => l.code === savedLang)) setLang(savedLang);
   }, []);
 
   const lt = LT[lang] ?? LT.EN;
@@ -275,7 +479,7 @@ export default function LandingPage() {
     localStorage.setItem("csreq_theme", m);
   };
 
-  const toggleLang = (l: LandingLang) => {
+  const toggleLang = (l: Lang) => {
     setLang(l);
     localStorage.setItem("csreq_app_lang", l);
   };
@@ -328,18 +532,18 @@ export default function LandingPage() {
                 </button>
               ))}
             </div>
-            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)", borderRadius: "8px", padding: "2px", gap: "2px" }}>
-              {(["TR", "EN"] as const).map(l => (
-                <button key={l} onClick={() => toggleLang(l)} style={{
-                  padding: "4px 10px", fontSize: "0.72rem", fontWeight: 600,
-                  border: "none", borderRadius: "6px", cursor: "pointer", transition: "all 0.2s",
-                  background: lang === l ? "var(--color-surface-2)" : "transparent",
-                  color: lang === l ? "var(--color-ink)" : "var(--color-ink-muted)",
-                }}>
-                  {l}
-                </button>
-              ))}
-            </div>
+            <select
+              value={lang}
+              onChange={e => toggleLang(e.target.value as Lang)}
+              aria-label="Language"
+              style={{
+                padding: "4px 8px", fontSize: "0.72rem", fontWeight: 600,
+                background: "rgba(255,255,255,0.04)", border: "1px solid var(--color-edge)",
+                borderRadius: "8px", color: "var(--color-ink-muted)", cursor: "pointer", outline: "none", flexShrink: 0,
+              }}
+            >
+              {LANGS.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}
+            </select>
             <Link
               href="/app"
               style={{
